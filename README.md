@@ -12,7 +12,7 @@ Baca berurutan:
 5. **`docs/SETUP_LAPTOP.md`** — setup environment (WSL2 + Node 22 + gh)
 6. **`docs/RESEARCH.md`** — dasar riset desain
 
-Prompt siap-paste: **`PROMPT.md`**
+Prompt siap-paste: **`PROMPT.md`** (agent dengan terminal) · **`PROMPT-PUBLIC.md`** (AI web / tanpa clone)
 
 ## Isi repo
 
