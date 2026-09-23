@@ -38,7 +38,7 @@ Detail lengkap keputusan produk (262 pertanyaan dijawab user) ada di **`docs/DEC
 2. `docs/DECISIONS.md` — **keputusan produk LOCKED** (5 pivot, keputusan per bagian, 8 flag, capability map 16 grup, 5 terobosan)
 3. `PLAN.md` — **Implementation Plan v2**: arsitektur, design token, spec tiap room, event protocol, data model, tool layer, route map, **rencana 14 hari (§11)**, verifikasi, risiko
 4. `docs/RESEARCH.md` — riset 2026 (kenapa agent UX harus 3-pane, sandbox, memory, artifact)
-5. `TASKS.md` — **checklist 40 task yang harus kamu kerjakan** (update checkbox-nya sambil jalan)
+5. `TASKS.md` — **checklist 38 task yang harus kamu kerjakan** (update checkbox-nya sambil jalan)
 6. `docs/SETUP_LAPTOP.md` — cara setup environment di laptop user
 7. `mockups/` — 3 mockup visual (acuan tampilan akhir)
 

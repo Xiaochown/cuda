@@ -1,5 +1,6 @@
-# TASKS — Cuda MVP (40 task, 14 hari)
+# TASKS — Cuda MVP (38 task, 14 hari)
 
+> 38 task ini konsolidasi dari 40 langkah di `PLAN.md §11`.
 > Update checkbox jadi `[x]` tiap task selesai. Satu task = satu commit.
 > Objective + acceptance criteria ada di tiap task. Kalau ada penyimpangan, tulis catatan di bawah task.
 

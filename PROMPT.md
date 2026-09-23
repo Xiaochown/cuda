@@ -17,7 +17,7 @@ LANGKAH 2 — Baca dokumen ini berurutan (jangan skip):
   1. AGENT_BRIEF.md        <- brief utama, baca SAMPAI HABIS dulu
   2. docs/DECISIONS.md     <- 262 keputusan produk yang sudah LOCKED (sumber kebenaran)
   3. PLAN.md               <- arsitektur, spec tiap room, event protocol, data model, rencana 14 hari
-  4. TASKS.md              <- checklist 40 task yang harus kamu kerjakan
+  4. TASKS.md              <- checklist 38 task yang harus kamu kerjakan
   5. docs/SETUP_LAPTOP.md  <- setup environment
   6. docs/RESEARCH.md      <- riset 2026 yang jadi dasar desain
 
