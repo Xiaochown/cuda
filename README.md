@@ -2,6 +2,14 @@
 
 Rencana, riset, keputusan produk, mockup, dan **brief eksekusi** untuk project **Cuda** — aplikasi AI local-first dengan dua room terpisah: **Cuda AI** (workspace chat) dan **Cuda Agent** (agentic console).
 
+## 📦 SATU FILE UNTUK SEMUA (mulai dari sini)
+
+**`CUDA-COMPLETE.md`** — prompt + semua dokumen + URL + langkah-langkah dalam SATU file (120 KB).
+Kirim file ini ke AI agent, bilang **"kerjakan file ini"**, dan dia bisa langsung eksekusi tanpa
+butuh apa-apa lagi.
+
+Raw URL: `https://raw.githubusercontent.com/Xiaochown/cuda/master/CUDA-COMPLETE.md`
+
 ## 🚀 Kalau kamu AI agent yang mau mengeksekusi project ini
 
 Baca berurutan:
