@@ -1,0 +1,101 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Riset &amp; Sumber — Cuda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d10;--surface:#15171b;--surface2:#1b1e23;--border:#2a2e35;--border2:#343941;
+--text:#e6e8eb;--dim:#9aa3af;--mute:#6b7280;--accent:#5e6ad2;--accent2:#8b5cf6;--blue:#4f8cff;
+--ok:#22c55e;--warn:#f5a524;--err:#ef4444;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{display:flex;max-width:1400px;margin:0 auto;gap:0}
+nav{position:sticky;top:0;align-self:flex-start;width:290px;flex:0 0 290px;height:100vh;overflow-y:auto;
+padding:26px 18px 60px;border-right:1px solid var(--border);background:#0d0f13}
+nav .brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+nav .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+nav .brand b{font-size:15px;letter-spacing:-.2px}
+nav .brand span{display:block;font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+nav a{display:block;color:var(--dim);font-size:13px;padding:4px 8px;border-radius:6px;margin:1px 0}
+nav a:hover{background:var(--surface);color:var(--text);text-decoration:none}
+nav .sec{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:16px 8px 6px}
+main{flex:1;min-width:0;padding:44px 46px 120px;max-width:1000px}
+.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:34px;line-height:1.2;letter-spacing:-.7px;margin:10px 0 6px}
+h2{font-size:21px;letter-spacing:-.35px;margin:52px 0 12px;padding-top:20px;border-top:1px solid var(--border)}
+h3{font-size:16.5px;margin:30px 0 8px}
+h4{font-size:14.5px;margin:22px 0 6px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+p{margin:11px 0}
+ul,ol{margin:11px 0;padding-left:22px}li{margin:5px 0}
+code{font-family:var(--mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border);
+padding:1.5px 5px;border-radius:5px;color:#c9d1d9}
+pre{background:#0f1216;border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;margin:16px 0}
+pre code{background:none;border:0;padding:0;font-size:12.5px;line-height:1.6;color:#c9d1d9;white-space:pre}
+blockquote{margin:16px 0;padding:12px 18px;border-left:2px solid var(--accent2);background:#12141a;
+border-radius:0 8px 8px 0;color:#cfd4dc}
+blockquote p{margin:4px 0}
+hr{border:0;border-top:1px solid var(--border);margin:34px 0}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+th,td{border:1px solid var(--border);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--surface);color:var(--dim);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+tr:nth-child(even) td{background:#101216}
+strong{color:#fff;font-weight:600}
+.hero{background:linear-gradient(180deg,#141821,#0e1116);border:1px solid var(--border);border-radius:14px;
+padding:26px 28px;margin:0 0 30px}
+.hero .sub{color:var(--dim);font-size:15px;margin:8px 0 0}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.badge{font-size:11.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);color:var(--dim);
+background:#12151b}
+.badge.b{border-color:#2a4a7a;color:#8ab4f8}.badge.v{border-color:#4a3170;color:#c4a6ff}
+.badge.g{border-color:#1f5136;color:#7ee2a8}.badge.a{border-color:#5c4318;color:#f3c078}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:20px 0}
+figure{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+figure img{width:100%;display:block}
+figcaption{padding:10px 14px;font-size:12.5px;color:var(--dim);border-top:1px solid var(--border)}
+.note{border:1px solid #4a3170;background:#161226;border-radius:10px;padding:14px 18px;margin:20px 0}
+.note b{color:#c4a6ff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:16px 18px}
+.card h3{margin:0 0 8px;font-size:15px}
+.card ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+footer{color:var(--mute);font-size:12.5px;border-top:1px solid var(--border);margin-top:60px;padding-top:20px}
+@media(max-width:960px){nav{display:none}main{padding:26px 18px 90px}h1{font-size:26px}.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<nav><div class="brand"><div class="mark">C</div><div><b>Cuda</b><span>plan &amp; riset</span></div></div><a href="decisions.html">✅ Keputusan Terkunci</a><a href="index.html">📋 Plan Implementasi v2</a><a href="research.html">🔎 Riset &amp; Sumber</a><a href="mockups.html">🎨 Mockup</a><a href="questionnaire/">📝 Kuesioner 262 Pertanyaan</a><div class="sec">Isi halaman</div><a href="#1-agent-ux-kenapa-chat-first-gagal" style="padding-left:8px">1. Agent UX — kenapa chat-first gagal</a><a href="#2-artifact-canvas-artifact-harus-jadi-objek" style="padding-left:8px">2. Artifact / Canvas — artifact harus jadi OBJEK</a><a href="#3-referensi-produk-repo-data-github-23-sep-2026" style="padding-left:8px">3. Referensi produk &amp; repo (data GitHub, 23 Sep 2026</a><a href="#4-sandbox-pilihan-teknis" style="padding-left:8px">4. Sandbox — pilihan teknis</a><a href="#5-memory-vector-saja-tidak-cukup" style="padding-left:8px">5. Memory — vector saja tidak cukup</a><a href="#6-catatan-lingkungan-hasil-cek-box" style="padding-left:8px">6. Catatan lingkungan (hasil cek box)</a></nav>
+<main><div class="kicker">cuda · riset</div><h1>Riset &amp; Sumber</h1><div class="hero"><p class="sub">15 query Firecrawl + ~40 halaman dibaca. Semua keputusan arsitektur di plan punya rujukan di sini.</p></div><p>Riset dijalankan dengan Firecrawl API v2 (<code>/search</code> + <code>/scrape</code>), 15 query, ~40 halaman.</p>
+<p>Data mentah: <code>raw_search.json</code>, <code>pages.json</code>, <code>github.json</code> (di <code>/root/cuda-research/</code>).</p>
+<h2 id="1-agent-ux-kenapa-chat-first-gagal">1. Agent UX — kenapa chat-first gagal</h2>
+<p><strong>Sumber utama:</strong></p>
+<ul><li>Fuselab Creative — <em>Agent UX: designing UI for AI agents in 2026</em> — <a href="https://fuselabcreative.com/ui-design-for-ai-agents/" target="_blank" rel="noopener">https://fuselabcreative.com/ui-design-for-ai-agents/</a></li><li>Hatchworks — <em>Agent UX Patterns: Chat-First UX Fails</em> — <a href="https://hatchworks.com/blog/ai-agents/agent-ux-patterns/" target="_blank" rel="noopener">https://hatchworks.com/blog/ai-agents/agent-ux-patterns/</a></li><li>AI UX Playground — <em>Agents patterns</em> — <a href="https://aiuxplayground.com/patterns/agents" target="_blank" rel="noopener">https://aiuxplayground.com/patterns/agents</a></li><li>The Skins Factory — <em>AI Agent UX Design</em> — <a href="https://www.theskinsfactory.com/uiux-design-blog/ai-agent-ux-design" target="_blank" rel="noopener">https://www.theskinsfactory.com/uiux-design-blog/ai-agent-ux-design</a></li></ul>
+<p><strong>Temuan kunci (dipakai sebagai keputusan arsitektur Cuda):</strong></p>
+<ol><li>&gt; <em>"The architectural fix is separating the conversation from the activity stream. The conversation thread is where the user sets goals and provides input. A dedicated activity panel shows the agent's autonomous work in progress. Combining both into one stream produces an interface that fails as both a conversation and an activity tracker."</em></li></ol>
+<p>   → <strong>Cuda Agent = 3-pane: Misic(chat/brief) | Aktivitas(timeline) | Workspace.</strong></p>
+<ol><li>Perbedaan kelas produk: <em>chatbot</em> = thread + input + formatting; <em>assistant</em> = + dialog konfirmasi; <em>agent</em> = + <strong>plan visibility layer, real-time progress tracking, intervention points, audit trail</strong>. Membangun UI agent dari template chatbot = gagal karena cadence request-response dilanggar agent (4 aksi otonom terjadi antara dua pesan user).</li></ol>
+<ol><li>Empat prinsip wajib: <strong>transparency</strong> (alasan di level keputusan, bukan cuma output — "fait accompli" confirmation screen tidak cukup), <strong>user control</strong> (pause/override/redirect per-step tanpa restart; NASA mission dashboard: step-level intervention = fitur paling dihargai), <strong>proactive status</strong> (diam = anxiety tercepat; "comparing 14 options" mengubah 30 detik dari "rusak?" jadi "sedang kerja"), <strong>structured error recovery</strong> (apa yang gagal + kenapa + langkah berikutnya — bukan tombol retry generik).</li></ol>
+<ol><li>Kegagalan chat-first yang paling umum: invisible actions, unclear state, no controls, no recovery path, no accountability trail, no way to pause, no "kenapa begitu".</li></ol>
+<ol><li><strong>12 pattern produksi</strong> (hatchworks): Taskboard+Outcomes · Activity Timeline · Start/Stop/Pause/Resume · Autonomy Levels (Suggest→Draft→Execute) · Two-Phase Actions (Plan→Validate→Execute) · Action Receipts (diff + rollback hook) · Evidence Panel (sumber + rasional, <strong>bukan</strong> chain-of-thought dump) · Human Checkpoint Gates · Autonomy Budget · Per-Action Autonomy (autonomy per kapabilitas, bukan per app) · Checkpoints &amp; Restore · Escalation.</li></ol>
+<p>   → Semua 12 dipetakan jadi fitur konkret di <code>PLAN.md §5.2</code>.</p>
+<ol><li>Gartner: 40% enterprise apps punya task-specific AI agent akhir 2026 (dari &lt;5% di 2025) — interface layer-nya belum ada satu tahun lalu.</li></ol>
+<h2 id="2-artifact-canvas-artifact-harus-jadi-objek">2. Artifact / Canvas — artifact harus jadi OBJEK</h2>
+<p><strong>Sumber:</strong> instapods — <em>ChatGPT Artifacts vs Claude Artifacts: Is Canvas the Same? (2026)</em> — <a href="https://instapods.com/blog/claude-artifacts-vs-chatgpt-canvas/" target="_blank" rel="noopener">https://instapods.com/blog/claude-artifacts-vs-chatgpt-canvas/</a></p>
+<ul><li>Claude Artifacts: side panel, <strong>disimpan sebagai objek bernama</strong>, punya <strong>version history</strong>, tombol <strong>Publish</strong> → URL publik. Bisa dipakai di Free/Pro/Max.</li><li>ChatGPT Canvas: preview pane bagus (HTML/React/SVG/Mermaid/Vega) + Python in-browser + targeted edit (highlight → "pendekin ini"), tapi <strong>bloknya mati di dalam thread</strong>; Canvas dihentikan dari GPT-5.5 (Mei 2026) dan dilebur jadi inline blocks.</li><li><strong>Kesimpulan untuk Cuda AI:</strong> artifact wajib punya versioning + share link sendiri (<code>/share/a/&lt;slug&gt;</code>) + targeted edit. Render di <strong>sandboxed iframe</strong> + postMessage.</li></ul>
+<h2 id="3-referensi-produk-repo-data-github-23-sep-2026">3. Referensi produk &amp; repo (data GitHub, 23 Sep 2026)</h2>
+<p><strong>Chat UI (acuan Cuda AI):</strong></p>
+<ul><li>open-webui/open-webui ⭐152.9k (Python, MCP) — RAG dokumen, user mgmt, <strong>conversation branching</strong></li><li>lobehub/lobehub ⭐82.8k — paling polished; plugin 100+, TTS/STT, knowledge base, mobile bagus</li><li>danny-avila/LibreChat ⭐44.7k (MIT) — <strong>artifacts, agents, MCP, skills</strong>, multi-provider, granular permissions</li><li>chatboxai/chatbox ⭐41.8k · vercel/chatbot ⭐21.0k (Next.js + Redis + shadcn) · enricoros/big-AGI ⭐7.1k (<strong>Beam multi-model chat</strong> = acuan compare mode) · Cinnamon/kotaemon ⭐25.8k (RAG)</li><li>Pelajaran pasar (Elestio): UI ChatGPT sudah jadi <em>table stakes</em>; diferensiasi pindah ke workflow/agent/RAG/privasi.</li></ul>
+<p><strong>Agent workspace (acuan Cuda Agent):</strong></p>
+<ul><li>kortix-ai/suna ⭐20.2k — open-source Manus/Cowork alternative; sandbox baca/tulis file, browser</li><li>OpenHands/OpenHands ⭐89.0k (MIT) — agent workspace: terminal + browser + editor</li><li>browser-use/browser-use ⭐116.0k (MIT) — tool browser</li><li>cline/cline ⭐69.1k (Apache-2.0) — acuan <strong>approval gate before every action</strong></li><li>e2b-dev/E2B ⭐13.9k · daytonaio/daytona ⭐71.7k — sandbox code execution</li><li>modelcontextprotocol/servers ⭐90.6k — MCP (tool eksternal)</li><li>mem0ai/mem0 ⭐65.9k · getzep/graphiti ⭐31.1k — memory layer</li><li>langgenius/dify ⭐156.9k · n8n-io/n8n ⭐205.8k — workflow/agent builder (acuan Playbook)</li><li>firecrawl/firecrawl ⭐183.6k — search/scrape (sudah dipakai user)</li></ul>
+<p><strong>Agent harness 2026 (nimbalyst.com):</strong> Claude Code = paling kuat untuk refactor; OpenCode = open-source terbaik; Cline = approval gate; Aider = commit per turn; <strong>"workspace di atas agent" = lapisan yang masalahnya belum selesai</strong> → peluang Cuda Agent.</p>
+<h2 id="4-sandbox-pilihan-teknis">4. Sandbox — pilihan teknis</h2>
+<p><strong>Sumber:</strong> Northflank — <em>Daytona vs E2B in 2026</em> — <a href="https://northflank.com/blog/daytona-vs-e2b-ai-code-execution-sandboxes" target="_blank" rel="noopener">https://northflank.com/blog/daytona-vs-e2b-ai-code-execution-sandboxes</a></p>
+<ul><li><strong>E2B</strong>: Firecracker microVM, kernel terpisah per sesi (isolasi hardware), cold start tercepat, SDK TypeScript bersih, model sesi (bukan persist). Managed → kode dikirim ke infra mereka.</li><li><strong>Daytona</strong>: workspace persisten, container (shared kernel); produksi closed-source sejak Juni 2026.</li><li><strong>WebContainer</strong>: jalan di browser, bagus untuk preview tapi tidak untuk tool native (shell/browser).</li><li><strong>Box ini tidak punya Docker</strong> → MVP pakai <em>process-level sandbox</em> (workspace per-run + path-traversal guard + allowlist command + timeout + rlimit + output cap). Naik kelas: E2B free tier atau node terpisah.</li></ul>
+<h2 id="5-memory-vector-saja-tidak-cukup">5. Memory — vector saja tidak cukup</h2>
+<p><strong>Sumber:</strong> Mem0 <em>State of AI Agent Memory 2026</em> — <a href="https://mem0.ai/blog/state-of-ai-agent-memory-2026" target="_blank" rel="noopener">https://mem0.ai/blog/state-of-ai-agent-memory-2026</a> · vectorize.io — <a href="https://vectorize.io/articles/best-ai-agent-memory-systems" target="_blank" rel="noopener">https://vectorize.io/articles/best-ai-agent-memory-systems</a> · Atlan — <a href="https://atlan.com/know/mem0-alternatives/" target="_blank" rel="noopener">https://atlan.com/know/mem0-alternatives/</a></p>
+<ul><li>Mem0: dual-store vector + knowledge graph (Qdrant/Chroma/pgvector/Redis).</li><li>Zep/Graphiti (arXiv 2501.13956): tiap node/edge punya <code>valid_at</code> + <code>invalid_at</code> → <strong>temporal retrieval 91% vs mem0 49%</strong>.</li><li>"Just use a bigger context window" = jebakan.</li><li><strong>Keputusan Cuda:</strong> SQLite FTS5 + embedding lokal + tabel fakta bertimestamp (<code>MemoryFact</code>) — murah, tanpa layanan eksternal, tetap bisa jawab "fakta ini masih berlaku?".</li></ul>
+<h2 id="6-catatan-lingkungan-hasil-cek-box">6. Catatan lingkungan (hasil cek box)</h2>
+<ul><li>Node v22.23.2, npm 10.9.8 ✅ (Next.js 16 aman)</li><li><strong>Docker: TIDAK ADA</strong> ❌ → sandbox process-level dulu</li><li>Disk <code>/</code> <strong>99% penuh — sisa 2.6 GB</strong> ⚠️ → build berat sebaiknya di VPS/STB atau bersihkan dulu</li><li>gh CLI: login sebagai <code>Xiaochown</code> ✅ (bisa <code>gh repo create</code>)</li><li>cloudflared: <code>/root/.9router/bin/cloudflared</code> ✅ (tunnel pakai script, <code>--protocol http2</code>)</li><li>Port bebas: 9090–9095, 9400, 9999, 3000 ✅</li><li>Kandidat ruang disk: <code>/root/meridian</code> 1.2G · <code>nuxt-neobrutalism</code> 735M · <code>masbraw-router-v2</code> 710M · <code>belajar-ai-neo-brutal</code> 546M · <code>ai-belajar</code> 486M (≈3.7 GB bisa diarsipkan)</li></ul>
+<footer>Cuda — plan v1.0 · dibuat 23 Sep 2026 · sumber riset: Firecrawl (lihat <a href="research.html">Riset &amp; Sumber</a>)</footer>
+</main></div></body></html>

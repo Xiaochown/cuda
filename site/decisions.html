@@ -1,0 +1,172 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Keputusan Terkunci — Cuda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d10;--surface:#15171b;--surface2:#1b1e23;--border:#2a2e35;--border2:#343941;
+--text:#e6e8eb;--dim:#9aa3af;--mute:#6b7280;--accent:#5e6ad2;--accent2:#8b5cf6;--blue:#4f8cff;
+--ok:#22c55e;--warn:#f5a524;--err:#ef4444;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{display:flex;max-width:1400px;margin:0 auto;gap:0}
+nav{position:sticky;top:0;align-self:flex-start;width:290px;flex:0 0 290px;height:100vh;overflow-y:auto;
+padding:26px 18px 60px;border-right:1px solid var(--border);background:#0d0f13}
+nav .brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+nav .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+nav .brand b{font-size:15px;letter-spacing:-.2px}
+nav .brand span{display:block;font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+nav a{display:block;color:var(--dim);font-size:13px;padding:4px 8px;border-radius:6px;margin:1px 0}
+nav a:hover{background:var(--surface);color:var(--text);text-decoration:none}
+nav .sec{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:16px 8px 6px}
+main{flex:1;min-width:0;padding:44px 46px 120px;max-width:1000px}
+.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:34px;line-height:1.2;letter-spacing:-.7px;margin:10px 0 6px}
+h2{font-size:21px;letter-spacing:-.35px;margin:52px 0 12px;padding-top:20px;border-top:1px solid var(--border)}
+h3{font-size:16.5px;margin:30px 0 8px}
+h4{font-size:14.5px;margin:22px 0 6px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+p{margin:11px 0}
+ul,ol{margin:11px 0;padding-left:22px}li{margin:5px 0}
+code{font-family:var(--mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border);
+padding:1.5px 5px;border-radius:5px;color:#c9d1d9}
+pre{background:#0f1216;border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;margin:16px 0}
+pre code{background:none;border:0;padding:0;font-size:12.5px;line-height:1.6;color:#c9d1d9;white-space:pre}
+blockquote{margin:16px 0;padding:12px 18px;border-left:2px solid var(--accent2);background:#12141a;
+border-radius:0 8px 8px 0;color:#cfd4dc}
+blockquote p{margin:4px 0}
+hr{border:0;border-top:1px solid var(--border);margin:34px 0}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+th,td{border:1px solid var(--border);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--surface);color:var(--dim);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+tr:nth-child(even) td{background:#101216}
+strong{color:#fff;font-weight:600}
+.hero{background:linear-gradient(180deg,#141821,#0e1116);border:1px solid var(--border);border-radius:14px;
+padding:26px 28px;margin:0 0 30px}
+.hero .sub{color:var(--dim);font-size:15px;margin:8px 0 0}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.badge{font-size:11.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);color:var(--dim);
+background:#12151b}
+.badge.b{border-color:#2a4a7a;color:#8ab4f8}.badge.v{border-color:#4a3170;color:#c4a6ff}
+.badge.g{border-color:#1f5136;color:#7ee2a8}.badge.a{border-color:#5c4318;color:#f3c078}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:20px 0}
+figure{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+figure img{width:100%;display:block}
+figcaption{padding:10px 14px;font-size:12.5px;color:var(--dim);border-top:1px solid var(--border)}
+.note{border:1px solid #4a3170;background:#161226;border-radius:10px;padding:14px 18px;margin:20px 0}
+.note b{color:#c4a6ff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:16px 18px}
+.card h3{margin:0 0 8px;font-size:15px}
+.card ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+footer{color:var(--mute);font-size:12.5px;border-top:1px solid var(--border);margin-top:60px;padding-top:20px}
+@media(max-width:960px){nav{display:none}main{padding:26px 18px 90px}h1{font-size:26px}.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<nav><div class="brand"><div class="mark">C</div><div><b>Cuda</b><span>plan &amp; riset</span></div></div><a href="decisions.html">✅ Keputusan Terkunci</a><a href="index.html">📋 Plan Implementasi v2</a><a href="research.html">🔎 Riset &amp; Sumber</a><a href="mockups.html">🎨 Mockup</a><a href="questionnaire/">📝 Kuesioner 262 Pertanyaan</a><div class="sec">Isi halaman</div><a href="#1-lima-pivot-besar-ini-yang-mengubah-arah-project" style="padding-left:8px">1. Lima pivot besar (ini yang mengubah arah project)</a><a href="#pivot-1-cuda-itu-local-first-client-bukan-saas-gateway" style="padding-left:20px;font-size:12.5px">Pivot #1 — Cuda itu **local-first client**, bukan Sa</a><a href="#pivot-2-desktop-first-mobile-pwa-nanti-jadi-software" style="padding-left:20px;font-size:12.5px">Pivot #2 — **Desktop-first**, mobile PWA, nanti jadi</a><a href="#pivot-3-skills-menggantikan-prompt-library" style="padding-left:20px;font-size:12.5px">Pivot #3 — **Skills menggantikan Prompt Library**</a><a href="#pivot-4-english-first-bilingual" style="padding-left:20px;font-size:12.5px">Pivot #4 — **English-first, bilingual**</a><a href="#pivot-5-satu-accent-midnight-blue-ala-chatgpt-bukan-dua-warn" style="padding-left:20px;font-size:12.5px">Pivot #5 — **Satu accent midnight-blue ala ChatGPT**</a><a href="#2-keputusan-per-bagian" style="padding-left:8px">2. Keputusan per bagian</a><a href="#3-flag-konflik-hal-yang-perlu-gue-putuskan-dikonfirmasi" style="padding-left:8px">3. Flag: konflik &amp; hal yang perlu gue putuskan/dikon</a><a href="#4-design-token-revisi-sesuai-6" style="padding-left:8px">4. Design token (revisi sesuai #6)</a><a href="#5-capability-map-distilasi-daftar-fitur-17" style="padding-left:8px">5. Capability map — distilasi daftar fitur #17</a><a href="#6-terobosan-yang-gue-usulkan-jawaban-30-kamu-pikirkan-sendir" style="padding-left:8px">6. Terobosan yang gue usulkan (jawaban #30: "kamu pi</a><a href="#7-yang-berubah-dari-plan-v1-v2" style="padding-left:8px">7. Yang berubah dari plan v1 → v2</a></nav>
+<main><div class="kicker">cuda · decision record</div><h1>Keputusan Terkunci</h1><div class="hero"><p class="sub">Hasil ekstraksi 262 jawaban kuesioner: 5 pivot besar, keputusan per bagian, 8 flag konflik, capability map 16 grup, dan 5 terobosan.</p><div class="badges"><span class="badge b">262/262 terjawab</span><span class="badge g">MVP 2 minggu</span><span class="badge v">Desktop-first</span><span class="badge a">BYOE · gratis</span></div></div><p>Sumber: <code>docs/ANSWERS.md</code> (jawaban mentah user, 262/262 terjawab, 23 Sep 2026).</p>
+<p>Dokumen ini = hasil ekstraksi keputusan + flag konflik + capability map. <strong>Plan v2 mengikuti dokumen ini.</strong></p>
+<hr>
+<h2 id="1-lima-pivot-besar-ini-yang-mengubah-arah-project">1. Lima pivot besar (ini yang mengubah arah project)</h2>
+<h3 id="pivot-1-cuda-itu-local-first-client-bukan-saas-gateway">Pivot #1 — Cuda itu <strong>local-first client</strong>, bukan SaaS gateway</h3>
+<p>Jawaban #191, #192, #200, #201, #165–#172: <strong>gratis by default, user bawa base_url + API key sendiri (BYOE — Bring Your Own Everything)</strong>.</p>
+<p>Tidak ada model bawaan, tidak ada markup, tidak ada kuota, tidak ada rate limit dari sisi Cuda.</p>
+<p>→ Konsekuensi: Cuda = <em>shell</em> (UI + agent engine + tools), bukan penyedia token. Infra biaya ≈ Rp0. Onboarding wajib punya <strong>preset provider</strong> + wizard input key.</p>
+<h3 id="pivot-2-desktop-first-mobile-pwa-nanti-jadi-software">Pivot #2 — <strong>Desktop-first</strong>, mobile PWA, nanti jadi software</h3>
+<p>#219, #220, #228, #255, #57: desktop nomor 1, PWA di v1, target akhir = <strong>software desktop + mobile app</strong>.</p>
+<p>→ Konsekuensi: arsitektur harus bisa dibungkus (Tauri/Electron) nanti. Storage <strong>dua-duanya</strong> (server SQLite + browser IndexedDB) karena #182 minta lokal + server.</p>
+<h3 id="pivot-3-skills-menggantikan-prompt-library">Pivot #3 — <strong>Skills menggantikan Prompt Library</strong></h3>
+<p>#78, #80, #257, #163, #164: tidak ada prompt library; gantinya <strong>skill yang dipanggil dengan <code>/</code></strong>, plus plugin &amp; marketplace, dan <strong>Cuda boleh bikin skill sendiri</strong>.</p>
+<p>→ Konsekuensi: butuh <strong>Skill Engine</strong> (SKILL.md + tool grants + trigger + versioning) sejak v1, bukan sekadar template prompt.</p>
+<h3 id="pivot-4-english-first-bilingual">Pivot #4 — <strong>English-first, bilingual</strong></h3>
+<p>#7, #8, #12: bahasa utama Inggris, switch ke Indonesia; istilah UI pakai Inggris (Mission/Step/Permission/Receipt/Deliverables); tanpa footer/credit biar profesional; fokus app ke Cuda Agent.</p>
+<h3 id="pivot-5-satu-accent-midnight-blue-ala-chatgpt-bukan-dua-warn">Pivot #5 — <strong>Satu accent midnight-blue ala ChatGPT</strong>, bukan dua warna</h3>
+<p>#6: hitam + biru midnight, "linear khas ChatGPT", <strong>icon berwarna</strong> (model/brand icons colorful).</p>
+<p>→ Token diperbarui di §4. Skema dua-accent (biru/violet) dibatalkan.</p>
+<hr>
+<h2 id="2-keputusan-per-bagian">2. Keputusan per bagian</h2>
+<p><strong>A. Brand</strong> — Cuda (induk), Cuda AI + Cuda Agent. Tagline: <em>"Cuda for Simple Work. Cuda Agent for Deep Work, Autonomous."</em> Domain nanti (Vercel dulu). Logo monogram C. Maskot: nanti. Brand berdiri sendiri.</p>
+<p><strong>B. Positioning</strong> — publik (mahasiswa, remaja, pekerja, vibe coder, programmer, umum). Komersial + personal nanti. Target 1.000 user / 3 bulan. Pricing: nanti. Mode team/multi-user: <strong>v1</strong>. Offline/privasi khusus: tidak perlu.</p>
+<p><strong>C. Scope</strong> — P0–P4 dulu, <strong>Cuda AI diselesaikan dulu</strong> baru Agent. <strong>MVP ≈ 2 minggu.</strong> Deep Research: v1. STT+TTS: v1. Multi-sesi agent paralel: v1. Cron misi: v1. MCP: v2. Compare mode: tidak perlu. Playbook: terserah gue (kalau berguna). "3 fitur wajib" diserahkan ke gue (lihat §5).</p>
+<p><strong>D. Stack</strong> — Next.js 16, Tailwind 4 + komponen sendiri, ORM/state/monorepo/runtime: gue pilih (→ Prisma, Zustand+React Query, npm workspaces, Fastify). Chat SSE + Agent WebSocket. Zod: oke. Vitest + Playwright: oke. API publik OpenAI-compatible: <strong>tidak</strong>. Multi-tenant: nanti. i18n: framework. Monorepo <strong>berdiri sendiri</strong> (tidak gabung Meridian). Dev runtime: box ini.</p>
+<p><strong>E. Infra</strong> — Web → <strong>Vercel</strong>. Agent-node → box ini (lokal). DB → SQLite. Storage → lokal. Backup → GitHub. Budget → <strong>$0</strong>. Node down → tampil error. Queue → in-memory dulu, Redis menyusul. Monitoring → <strong>log saja</strong>. Log 30 hari. Disk → pakai drive lain (bukan rootfs 99%). Build → box ini.</p>
+<p><strong>F. Cuda AI</strong> — sidebar mengikuti mockup, jawaban <strong>polos</strong> (Claude-style), Projects/Ruang Kerja v1 + custom instruction, organisasi <strong>folder</strong>, search <strong>full-text + semantik</strong>, pin/arsip/hapus massal semua, Enter=kirim, draft sync, <strong>skills via <code>/</code></strong>, persona chips generik (gue generate), attach semua tipe ≤50MB, <strong>OCR perlu</strong>, web search <strong>multi-engine gratis (DuckDuckGo/Brave/Firecrawl) &amp; user-configurable</strong>, default ON, image gen via custom key (sunburst/flare/gpt-image-2.0), TTS+STT Indonesia, branching penting, continue-generating, rating, export PDF berbrand, share <strong>harus klik Publish</strong>, tanpa mode sementara.</p>
+<p><strong>G. Artifact &amp; Memory</strong> — artifact <strong>selalu tanya</strong> sebelum dibuka, tipe bebas, JS sandbox bebas, <strong>versioning tak terbatas</strong>, targeted edit v1, publish link bisa dicabut, bisa diedit manual, <strong>halaman galeri artifact</strong>, memory boleh mengingat <strong>semua</strong>, halaman Memory CRUD, scope <strong>gabungan</strong> (global+workspace+thread), penjelasan "kenapa diingat" perlu, <strong>tanpa kadaluwarsa otomatis</strong>, <strong>import riwayat ChatGPT/Hermes perlu</strong>.</p>
+<p><strong>H. Agent flow</strong> — mulai misi dari form <strong>atau</strong> dari chat, <strong>wajib tampilkan Rencana + approval</strong>, setelah approve tetap tanya per aksi berisiko, <strong>Board (kanban) perlu</strong>, timeline <strong>terbuka</strong>, current-step pinned, estimasi <strong>waktu saja</strong>, retry <strong>3x lalu eskalasi</strong>, batas <strong>150 langkah / 100 aksi / tanpa batas waktu / tanpa batas biaya</strong>, agent <strong>sangat boleh</strong> bertanya balik, mode diskusi perlu, fork misi perlu, banding 2 rencana <strong>perlu (dengan tombol)</strong>, format serahan bebas, kirim hasil ke Telegram/WA boleh.</p>
+<p><strong>I. Kontrol &amp; Keamanan</strong> — autonomy tergantung permission yang dikasih user; izin wajib untuk <strong>hal sensitif saja</strong>; <strong>matriks izin per tool</strong> perlu; izin <strong>selalu tanya ulang</strong> (tidak diingat); mode paranoid perlu; mode gas perlu; izin ditolak → agent <strong>tanya alternatif</strong>; kartu izin auto-pause <strong>5 menit</strong>; akses folder <strong>boleh lebih luas bila perlu</strong>; internet <strong>bebas</strong>; <strong>sudo: BOLEH (flag risiko)</strong>; command berbahaya → <strong>tanya dulu</strong>; log <strong>diredact</strong>; audit trail <strong>exportable</strong>; undo <strong>git-based</strong>; checkpoint: bebas; simpan <strong>20 checkpoint</strong>; network namespace per misi (saat ada Docker) perlu; data misi <strong>permanen</strong>; credential <strong>boleh disimpan, terenkripsi, hanya user yang bisa lihat</strong>.</p>
+<p><strong>J. Tools</strong> — sebanyak yang bisa dibuat. v1: browser Playwright, Firecrawl scraping, image gen, PDF/DOCX/XLSX, git + auto-push, deploy Vercel/GH Pages, kirim email/WA/Telegram, query SQL, RAG workspace, olah CSV/XLSX besar, convert file, monitoring uptime + alert, <strong>OSINT (scam-hunt)</strong>, simpan Playbook dari misi sukses, jalankan skrip/plugin custom, marketplace plugin. <strong>Tidak</strong>: scrape IG/TikTok.</p>
+<p><strong>K. Model</strong> — <strong>semua dari base_url + key user</strong> (tidak ada default provider, tidak ada urutan prioritas dari Cuda); user atur fallback sendiri; pesan error bebas; tanpa limit token; <strong>BYO key wajib</strong>; tidak expose API OpenAI-compatible; markup 10% <em>(hanya relevan kalau nanti jual token)</em>; tanpa model lokal; prompt caching opsional, <strong>default off</strong>.</p>
+<p><strong>L. Data &amp; Auth</strong> — login bebas: Telegram/email/OAuth semua opsi (tidak ada yang wajib), <strong>mode tamu perlu</strong>, multi-device sync perlu, storage server+lokal, export semua data, hapus akun self-service, role admin, <strong>tanpa batas gratis</strong>, training/evaluasi → <strong>tanya dulu</strong>, enkripsi at-rest perlu, tanpa 2FA/timeout, share slug acak.</p>
+<p><strong>M. Billing</strong> — <strong>gratis by default</strong> (karena user bawa key sendiri). Tidak ada paket, invoice, referral, trial, rate limit. Kuota agent+chat digabung. (→ tidak ada pekerjaan billing di v1.)</p>
+<p><strong>N. Desain</strong> — tema <strong>ikut sistem</strong>, light mode v1, Inter + JetBrains Mono, density AI lega / Agent padat, animasi halus, suara notifikasi misi selesai, push browser, Lucide, ilustrasi/empty state custom, <strong>onboarding wizard</strong>, landing <strong>lengkap + demo interaktif</strong>, WCAG "seadanya", keyboard shortcut + cheat sheet, accent bisa diganti user, referensi visual bebas (ambil dari chatbot/web bagus).</p>
+<p><strong>O. Mobile</strong> — desktop prioritas #1 (dua-duanya), PWA v1, offline baca riwayat, tab bar Agent di HP (setuju), notif Telegram, tanpa swipe, font kecil, mode lanskap perlu, quick-share perlu, PWA cukup (native nanti).</p>
+<p><strong>P. Integrasi</strong> — tidak ada yang wajib, semua opsional. Meridian: belum. Migrasi masbraw-chat: tidak. Bot Telegram: perlu. WhatsApp: perlu. Kalender/Todoist: perlu. Webhook keluar: perlu. API key Cuda: perlu. <strong>Cuda jadi tool Hermes</strong>: perlu. MCP: beberapa yang berguna dulu. Pembayaran: nanti. Email laporan: tidak.</p>
+<p><strong>Q. Ops</strong> — maintainer: gue + user. CI/CD perlu. Staging perlu. Coverage "seadanya". Load test 10 misi paralel. Bug notif → Telegram. Halaman status perlu. Help center perlu. Changelog perlu. Backup harian.</p>
+<p><strong>R. Roadmap</strong> — 6 bulan: semua fitur AI terbaru. SaaS + personal. Cuda Teams: ya. Enterprise: belum. Desktop+mobile app: nanti. Marketplace: perlu. Belajar dari riwayat + bikin skill sendiri: perlu. <strong>Multi-agent collaboration: SANGAT perlu</strong>. Agent-as-a-service: belum paham (nanti dijelaskan). Milestone <strong>2–3 bulan</strong>. Batasan keras (haram): belum ada.</p>
+<hr>
+<h2 id="3-flag-konflik-hal-yang-perlu-gue-putuskan-dikonfirmasi">3. Flag: konflik &amp; hal yang perlu gue putuskan/dikonfirmasi</h2>
+<table><thead><tr><th>#</th><th>Isu</th><th>Kenyataan</th><th>Usul gue</th></tr></thead><tbody><tr><td>F1</td><td><strong>sudo boleh</strong> (#137) + command berbahaya "tanya dulu" (#138) + akses folder lebih luas (#135)</td><td>Kombinasi ini berbahaya: agent bisa mengubah sistem user</td><td>Default <strong>sudo OFF</strong> + wajib nyalakan sadar di Settings (dengan peringatan), command berbahaya butuh <strong>konfirmasi kedua</strong> (ketik ulang), semua sudo masuk audit log. Tetap hormati pilihan user, tapi ada guard.</td></tr><tr><td>F2</td><td><strong>150 langkah / 100 aksi / tanpa batas waktu &amp; biaya</strong> (#117–#120)</td><td>Misi bisa jalan lama &amp; nyangkut</td><td>Tetap seperti diminta, tapi: warning di 80% budget aksi, tombol "lanjutkan" eksplisit, auto-pause kalau 5 menit tidak ada progres (bukan batas keras).</td></tr><tr><td>F3</td><td><strong>"box ini"</strong> (#53, #56, #68) vs <strong>"drive C"</strong> (#67)</td><td>Ambiguitas: box Linux (tempat gue jalan sekarang) atau laptop Windows</td><td>Bangun di <strong>box Linux ini</strong> (bisa langsung kerja), kode cross-platform, nanti di-package jadi software desktop (Tauri) yang jalan di Windows. Kalau mau di laptop Windows, butuh sesi Hermes di mesin itu.</td></tr><tr><td>F4</td><td><strong>Gratis total + BYO key</strong> (#191, #200) tapi <strong>markup 10%</strong> (#176)</td><td>Konflik</td><td>Baca sebagai: v1 gratis total; markup 10% hanya kalau nanti Cuda jual token sendiri. Tidak ada pekerjaan billing di v1.</td></tr><tr><td>F5</td><td><strong>Tidak expose API OpenAI-compatible</strong> (#49) tapi <strong>perlu API key Cuda untuk app lain</strong> (#236)</td><td>Konflik</td><td>API internal Cuda (untuk bot Telegram/WA/webhook/plugin), bukan endpoint publik multi-provider.</td></tr><tr><td>F6</td><td><strong>Disk rootfs 99% penuh</strong> (#67: "pakai drive C aja dulu")</td><td>Kalau build di box ini, butuh ruang</td><td>Bersihkan/relokasi: pindahkan artefak besar ke <code>/sdcard</code> (drive HP) atau hapus project lama; atau build di laptop. Butuh ~5 GB.</td></tr><tr><td>F7</td><td><strong>Target 1.000 user / 3 bulan</strong> + <strong>tanpa model bawaan</strong></td><td>User baru harus punya API key sendiri → friksi tinggi</td><td>Onboarding wizard + <strong>preset provider</strong> (OpenAI/Anthropic/Gemini/OpenRouter/TeamORouter/Ldrcloud/Ollama) + mode tamu untuk coba UI dulu.</td></tr><tr><td>F8</td><td><strong>Multi-agent "sangat perlu"</strong> (#258) tapi MVP 2 minggu</td><td>Scope besar</td><td>Fondasi v1: event protocol + shared workspace + role model disiapkan; swarm penuh di v2.</td></tr></tbody></table>
+<hr>
+<h2 id="4-design-token-revisi-sesuai-6">4. Design token (revisi sesuai #6)</h2>
+<pre><code>/* base — hitam netral + midnight blue, idiom ChatGPT */
+--bg:#0d0d0d;          /* canvas */
+--bg-elev:#141517;     /* panel */
+--surface:#1a1c1f;     /* kartu */
+--surface-2:#22252a;   /* input / hover */
+--border:#2b2f36; --border-strong:#3a3f47;
+--text:#ececf1; --text-dim:#a0a6b0; --text-mute:#6e747e;
+/* accent tunggal */
+--accent:#2563eb; --accent-hover:#3b82f6; --accent-soft:#1e293b;
+/* status (agent) */
+--run:#f5a524; --ok:#22c55e; --err:#ef4444; --wait:#38bdf8; --idle:#6b7280;
+/* ikon berwarna: model/brand icon full-color (bukan monokrom) */
+--r-sm:6px; --r:10px; --r-lg:14px;
+--font:Inter; --mono:"JetBrains Mono",ui-monospace;</code></pre>
+<p>Aturan: light mode = <code>#ffffff / #f7f7f8 / #e5e5e5</code> dengan accent sama. Tema ikut sistem (#203).</p>
+<hr>
+<h2 id="5-capability-map-distilasi-daftar-fitur-17">5. Capability map — distilasi daftar fitur #17</h2>
+<p>Jawaban #17 isinya ~500 capability. Gue kelompokkan jadi 16 grup dan tempatkan per fase biar realistis (MVP 2 minggu → jangan janji semuanya sekaligus).</p>
+<p><strong>Grup 1 — Planning &amp; Reasoning:</strong> Autonomous Task Planning · Multi-Step Execution · Goal Decomposition · Prioritization · Dynamic Replanning · Self-Reflection · Self-Correction · Structured/Hierarchical Planning · ReAct &amp; Planner-Executor architecture.</p>
+<p>→ <strong>V1</strong> (planner+executor+replan). V2: reflection loop, hierarchical.</p>
+<p><strong>Grup 2 — Memory:</strong> Short/Long/Episodic/Semantic/Working · Retrieval · Summarization · Consolidation · User-preference · Agent state · Persistent profiles · Relevance scoring · Duplicate detection · Importance scoring.</p>
+<p>→ <strong>V1</strong>: working+long-term+preference+retrieval+summarize. <strong>V2</strong>: episodic/semantic graph, consolidation, importance scoring.</p>
+<p><strong>Grup 3 — Tool use:</strong> Discovery · Dynamic selection · Chaining · Parallel/Sequential/Conditional · Result validation · Failure detection · Retry logic · Caching.</p>
+<p>→ <strong>V1</strong> (registry + chain + validate + retry). V2: discovery/MCP-driven, caching.</p>
+<p><strong>Grup 4 — Code &amp; Repo:</strong> Code gen · Execution · Debugging · Refactoring · Review · Repo analysis · Git/GitHub/GitLab · Commit &amp; PR generation · Issue/branch management · Tests (unit/integration) · CI/CD.</p>
+<p>→ <strong>V1</strong>: gen+exec+debug+git+commit/PR+repo analysis. V2: auto-refactor, test generation, CI/CD, GitLab.</p>
+<p><strong>Grup 5 — Data &amp; Dokumen:</strong> Web scraping · Extraction · Cleaning · Transformation · Analysis · Spreadsheet/CSV/JSON/XML/Markdown · PDF read/generate · Document parsing · OCR · Database querying · SQL gen · Vector DB · Embeddings · Semantic search · RAG · Knowledge base · Knowledge graphs.</p>
+<p>→ <strong>V1</strong>: scrape, CSV/JSON, PDF, OCR, SQL, RAG ringan. V2: vector DB penuh, knowledge graph, NL-DB search.</p>
+<p><strong>Grup 6 — Web &amp; Browser:</strong> Search · Browsing · Page reading/summarization · Navigation · Browser automation · Form filling · Upload/Download · Screenshot · DOM inspection · Accessibility tree · Mouse/Keyboard automation · Multi-browser · Headless.</p>
+<p>→ <strong>V1</strong>: search, read, screenshot, automation dasar. V2: form filling, DOM/accessibility, desktop automation.</p>
+<p><strong>Grup 7 — Media:</strong> Image understanding · Generation · Editing · Screenshot analysis · Computer vision · Voice input · STT · TTS · Voice conversation.</p>
+<p>→ <strong>V1</strong>: STT+TTS (Indonesia), image understanding, gen via custom key. V2: image editing, vision pipeline, voice call mode.</p>
+<p><strong>Grup 8 — Kontrol &amp; Keamanan:</strong> HITL approval · Action confirmation · Sensitive action detection · Audit logs · Execution logs · Sandboxing · Permission boundaries · Risk scoring · Approval gates · Escalation · Emergency stop / kill switch · Quotas · Safe/Read-only/Restricted/Autonomous mode.</p>
+<p>→ <strong>V1</strong>: approval gates, risk scoring, audit log, kill switch, permission matrix, mode set.</p>
+<p><strong>Grup 9 — Observability:</strong> Activity timeline · Cost/token tracking · Latency &amp; performance monitoring · Agent analytics · Trace replay · Failure replay · Time-travel debugging · OpenTelemetry · Log export · Debug/verbose/dry-run/simulation mode · Decision logs · Explainable execution.</p>
+<p>→ <strong>V1</strong>: timeline, token/cost, trace replay, decision log, dry-run. V2: OTEL, analytics, time-travel debug console.</p>
+<p><strong>Grup 10 — Model &amp; Prompt:</strong> Model routing · Multi-model · Fallback · Selection · Temperature · Structured output/JSON schema · Function calling · Streaming tool results · Response validation · Hallucination detection · Fact verification · Source citation · Confidence scoring · Prompt management/optimization · Prompt caching.</p>
+<p>→ <strong>V1</strong>: BYO provider routing + fallback + structured output + citations + confidence. V2: hallucination detection, prompt optimization, semantic cache.</p>
+<p><strong>Grup 11 — Scheduling &amp; Triggers:</strong> Background/scheduled/recurring/event-driven tasks · Webhook &amp; conditional triggers · Cron · Autonomous monitoring · Change detection · Alerts.</p>
+<p>→ <strong>V1</strong>: cron misi, webhook, monitoring+alert. V2: event-driven graph, conditional triggers.</p>
+<p><strong>Grup 12 — Multi-Agent:</strong> Collaboration · A2A messaging · Delegation · Specialist/Supervisor/Worker/Planner/Research/Coding/Browser/Data/Writer/Reviewer/QA/Memory/Orchestrator agents · Handoff · Swarm · Shared memory/workspace · Conflict resolution · Consensus · Voting · Parallel research · Source comparison &amp; ranking.</p>
+<p>→ <strong>V1</strong>: fondasi (role model, shared workspace, A2A event). <strong>V2</strong>: swarm + consensus + specialist agents.</p>
+<p><strong>Grup 13 — Skills &amp; Ekstensi:</strong> Agent skills · Skill discovery/generation/evaluation/versioning/sharing · Slash commands · Custom commands · Plugin system (discovery/install/permissions/sandboxing) · Marketplace · MCP (server/tool discovery/resource access) · Custom connectors/webhooks/automations.</p>
+<p>→ <strong>V1</strong>: Skill Engine + slash command + plugin loader lokal. <strong>V2</strong>: MCP, marketplace, skill sharing.</p>
+<p><strong>Grup 14 — Workspace &amp; Kolaborasi:</strong> Multi-project · Workspace isolation · Env vars · Config files · Presets · Project rules · Team collaboration · Shared agents · Agent/workflow/config versioning · A/B agents · Multi-tenant.</p>
+<p>→ <strong>V1</strong>: multi-project + isolation + presets + project rules. V2: teams, versioning, A/B.</p>
+<p><strong>Grup 15 — Output &amp; Deliverables:</strong> Report/dashboard/chart/presentation generation · Website/UI generation · UI testing · Screenshot-to-code · Design-to-code · Figma · Full-stack project gen · Docs/README/changelog/release notes · SEO · Content/blog/social generation · Marketing automation.</p>
+<p>→ <strong>V1</strong>: report, chart, website/UI gen, docs/README/changelog. V2: design-to-code, Figma, full-stack scaffold, marketing suite.</p>
+<p><strong>Grup 16 — Domain packs (template misi):</strong> Research &amp; Deep Research · Competitive/market/technical research · Literature review · Fact checking · Education (learning path, quiz, flashcard, homework) · Personal productivity (journal, second brain, file organization) · DevOps (server monitoring, deployment, IaC, k8s, docker) · Security (vuln scan, secret leak, license) · Business (CRM, lead research, invoice/receipt, meeting notes).</p>
+<p>→ <strong>V1</strong>: 6 playbook (riset, scrape→dataset, bangun situs→deploy, monitoring→alert, OSINT, olah dokumen). V2: sisanya sebagai paket domain.</p>
+<hr>
+<h2 id="6-terobosan-yang-gue-usulkan-jawaban-30-kamu-pikirkan-sendir">6. Terobosan yang gue usulkan (jawaban #30: "kamu pikirkan sendiri, terobosan gila")</h2>
+<p>Lima hal yang bikin Cuda bukan "wrapper ChatGPT lagi":</p>
+<ol><li><strong>Self-Extending Skills</strong> — setelah misi sukses, Cuda <strong>menulis skill baru</strong> (<code>SKILL.md</code> + tool grants + contoh) dari apa yang barusan dia kerjakan, langsung bisa dipanggil <code>/</code>. Makin dipakai, makin pintar — tanpa training. (#78, #257, #162)</li><li><strong>Time-Travel Missions</strong> — semua langkah = event append-only, jadi: replay misi dari langkah mana pun, <strong>fork dari langkah N</strong>, dan <strong>banding 2 rencana side-by-side</strong> dengan tombol. Debugging &amp; trust level yang belum ada di ChatGPT/Claude. (#123, #124, #113)</li><li><strong>Universal Receipt + Undo</strong> — setiap aksi (file, terminal, git, deploy, kirim pesan) menghasilkan struk: apa berubah, diff, izin yang dipakai, <strong>tombol Undo</strong> (git-based). "What did it do?" selalu bisa dijawab. (#140, #141)</li><li><strong>Zero-Cost by Design (BYOE)</strong> — semua model/search/image/tool pakai key user; Cuda jadi shell gratis + preset provider. Ini yang bikin 1.000 user realistis tanpa biaya infra. (#174, #191)</li><li><strong>Personal Brain yang transparan</strong> — memory gabungan (global/workspace/thread) yang bisa dilihat, diedit, dijelaskan asalnya ("kenapa ini diingat"), plus import riwayat ChatGPT/Hermes. Bukan black-box RAG. (#103–#108)</li></ol>
+<p>Plus dua fondasi yang disiapkan diam-diam di v1 tapi baru "kelihatan" di v2: <strong>Agent Swarm</strong> (#258) dan <strong>Cuda as Hermes Tool</strong> (#237).</p>
+<hr>
+<h2 id="7-yang-berubah-dari-plan-v1-v2">7. Yang berubah dari plan v1 → v2</h2>
+<ul><li>Billing/kredit/admin-pricing → <strong>dihapus dari v1</strong> (gratis + BYOE).</li><li>Prompt Library → <strong>Skill Engine + slash command</strong>.</li><li>Dua accent warna → <strong>satu midnight blue + ikon berwarna</strong>.</li><li>Istilah Indonesia → <strong>Inggris</strong> (Mission/Step/Permission/Receipt/Deliverables) + i18n EN/ID.</li><li>API publik OpenAI-compatible → <strong>tidak ada</strong> (API internal saja).</li><li>Storage: SQLite server + IndexedDB browser <strong>dua-duanya</strong>.</li><li>Target: <strong>MVP 2 minggu</strong>, desktop-first, PWA v1, packaging desktop nanti.</li><li>Ditambah: cron misi, webhook, monitoring+alert, import riwayat, skill generator, Board view, mode diskusi, fork misi, banding rencana, 20 checkpoint, audit export, notif Telegram.</li><li>Ditunda ke v2: MCP, marketplace plugin, multi-agent swarm, multi-tenant/teams, desktop packaging, vector DB penuh, OTEL/analytics.</li></ul>
+<footer>Cuda — plan v1.0 · dibuat 23 Sep 2026 · sumber riset: Firecrawl (lihat <a href="research.html">Riset &amp; Sumber</a>)</footer>
+</main></div></body></html>

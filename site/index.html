@@ -1,0 +1,241 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Implementation Plan v2 — Cuda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d10;--surface:#15171b;--surface2:#1b1e23;--border:#2a2e35;--border2:#343941;
+--text:#e6e8eb;--dim:#9aa3af;--mute:#6b7280;--accent:#5e6ad2;--accent2:#8b5cf6;--blue:#4f8cff;
+--ok:#22c55e;--warn:#f5a524;--err:#ef4444;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{display:flex;max-width:1400px;margin:0 auto;gap:0}
+nav{position:sticky;top:0;align-self:flex-start;width:290px;flex:0 0 290px;height:100vh;overflow-y:auto;
+padding:26px 18px 60px;border-right:1px solid var(--border);background:#0d0f13}
+nav .brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+nav .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+nav .brand b{font-size:15px;letter-spacing:-.2px}
+nav .brand span{display:block;font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+nav a{display:block;color:var(--dim);font-size:13px;padding:4px 8px;border-radius:6px;margin:1px 0}
+nav a:hover{background:var(--surface);color:var(--text);text-decoration:none}
+nav .sec{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:16px 8px 6px}
+main{flex:1;min-width:0;padding:44px 46px 120px;max-width:1000px}
+.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:34px;line-height:1.2;letter-spacing:-.7px;margin:10px 0 6px}
+h2{font-size:21px;letter-spacing:-.35px;margin:52px 0 12px;padding-top:20px;border-top:1px solid var(--border)}
+h3{font-size:16.5px;margin:30px 0 8px}
+h4{font-size:14.5px;margin:22px 0 6px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+p{margin:11px 0}
+ul,ol{margin:11px 0;padding-left:22px}li{margin:5px 0}
+code{font-family:var(--mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border);
+padding:1.5px 5px;border-radius:5px;color:#c9d1d9}
+pre{background:#0f1216;border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;margin:16px 0}
+pre code{background:none;border:0;padding:0;font-size:12.5px;line-height:1.6;color:#c9d1d9;white-space:pre}
+blockquote{margin:16px 0;padding:12px 18px;border-left:2px solid var(--accent2);background:#12141a;
+border-radius:0 8px 8px 0;color:#cfd4dc}
+blockquote p{margin:4px 0}
+hr{border:0;border-top:1px solid var(--border);margin:34px 0}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+th,td{border:1px solid var(--border);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--surface);color:var(--dim);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+tr:nth-child(even) td{background:#101216}
+strong{color:#fff;font-weight:600}
+.hero{background:linear-gradient(180deg,#141821,#0e1116);border:1px solid var(--border);border-radius:14px;
+padding:26px 28px;margin:0 0 30px}
+.hero .sub{color:var(--dim);font-size:15px;margin:8px 0 0}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.badge{font-size:11.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);color:var(--dim);
+background:#12151b}
+.badge.b{border-color:#2a4a7a;color:#8ab4f8}.badge.v{border-color:#4a3170;color:#c4a6ff}
+.badge.g{border-color:#1f5136;color:#7ee2a8}.badge.a{border-color:#5c4318;color:#f3c078}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:20px 0}
+figure{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+figure img{width:100%;display:block}
+figcaption{padding:10px 14px;font-size:12.5px;color:var(--dim);border-top:1px solid var(--border)}
+.note{border:1px solid #4a3170;background:#161226;border-radius:10px;padding:14px 18px;margin:20px 0}
+.note b{color:#c4a6ff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:16px 18px}
+.card h3{margin:0 0 8px;font-size:15px}
+.card ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+footer{color:var(--mute);font-size:12.5px;border-top:1px solid var(--border);margin-top:60px;padding-top:20px}
+@media(max-width:960px){nav{display:none}main{padding:26px 18px 90px}h1{font-size:26px}.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<nav><div class="brand"><div class="mark">C</div><div><b>Cuda</b><span>plan &amp; riset</span></div></div><a href="decisions.html">✅ Keputusan Terkunci</a><a href="index.html">📋 Plan Implementasi v2</a><a href="research.html">🔎 Riset &amp; Sumber</a><a href="mockups.html">🎨 Mockup</a><a href="questionnaire/">📝 Kuesioner 262 Pertanyaan</a><div class="sec">Isi halaman</div><a href="#1-arsitektur-v2" style="padding-left:8px">1. Arsitektur v2</a><a href="#2-design-token-final-sesuai-jawaban-6" style="padding-left:8px">2. Design token (final, sesuai jawaban #6)</a><a href="#3-cuda-ai-spec-v1-ai" style="padding-left:8px">3. Cuda AI — spec v1 (`/ai`)</a><a href="#4-cuda-agent-spec-v1-agent" style="padding-left:8px">4. Cuda Agent — spec v1 (`/agent`)</a><a href="#5-agent-event-protocol-kontrak-inti-tidak-berubah" style="padding-left:8px">5. Agent Event Protocol (kontrak inti — tidak beruba</a><a href="#6-data-model-prisma-v2" style="padding-left:8px">6. Data model (Prisma, v2)</a><a href="#7-keamanan-permission-dengan-guard-dari-flag-f1" style="padding-left:8px">7. Keamanan &amp; permission (dengan guard dari flag F1)</a><a href="#8-skill-engine-pengganti-prompt-library" style="padding-left:8px">8. Skill Engine (pengganti prompt library)</a><a href="#9-tool-layer-v1" style="padding-left:8px">9. Tool layer v1</a><a href="#10-route-map-v2" style="padding-left:8px">10. Route map v2</a><a href="#11-rencana-14-hari-bite-sized-commit-tiap-task" style="padding-left:8px">11. Rencana 14 hari (bite-sized, commit tiap task)</a><a href="#hari-1-2-p0-fondasi" style="padding-left:20px;font-size:12.5px">Hari 1–2 · P0 Fondasi</a><a href="#hari-3-6-p1-cuda-ai-inti" style="padding-left:20px;font-size:12.5px">Hari 3–6 · P1 Cuda AI (inti)</a><a href="#hari-7-11-p2-cuda-agent" style="padding-left:20px;font-size:12.5px">Hari 7–11 · P2 Cuda Agent</a><a href="#hari-12-14-p3-ui-agent-polish-deploy" style="padding-left:20px;font-size:12.5px">Hari 12–14 · P3 UI Agent + polish + deploy</a><a href="#12-verifikasi" style="padding-left:8px">12. Verifikasi</a><a href="#13-risiko" style="padding-left:8px">13. Risiko</a><a href="#14-perlu-konfirmasi-singkat-bukan-blocker-kalau-dijawab-defa" style="padding-left:8px">14. Perlu konfirmasi singkat (bukan blocker kalau di</a></nav>
+<main><div class="kicker">cuda · plan implementasi v2</div><h1>Cuda — Implementation Plan</h1>
+<div class="hero"><p class="sub">Dua produk, dua page, dua mental model: <strong>Cuda AI</strong> (workspace chat biasa)
+dan <strong>Cuda Agent</strong> (agentic console). Dibangun dari nol dengan fondasi riset 2026.</p>
+<div class="badges"><span class="badge b">Next.js 16 + TS + Tailwind 4</span>
+<span class="badge v">Fastify agent-node + WS</span><span class="badge g">SQLite/Postgres + Prisma</span>
+<span class="badge a">12 Agent UX patterns</span><span class="badge">Estimasi 10–16 hari</span>
+<span class="badge">Status: menunggu approval</span></div></div><blockquote><p><strong>Untuk Hermes:</strong> plan ini dieksekusi task-by-task. Semua keputusan produk sudah dikunci di <code>docs/DECISIONS.md</code> (dari kuesioner 262 pertanyaan). Jangan tanya ulang hal yang sudah ada di sana.</p><p><strong>Status:</strong> keputusan produk LOCKED · menunggu "gas" untuk mulai P0.</p><p><strong>Target MVP:</strong> 2 minggu (desktop-first, Cuda AI diselesaikan dulu, lalu Cuda Agent).</p></blockquote>
+<p><strong>Goal:</strong> Bangun <strong>Cuda</strong> — aplikasi AI <strong>local-first</strong> dengan dua room terpisah:</p>
+<ul><li><strong>Cuda AI</strong> (<code>/ai</code>) — workspace chat biasa (ngobrol, tanya-jawab, dokumen, artifact, riset).</li><li><strong>Cuda Agent</strong> (<code>/agent</code>) — console agentic (kasih goal → plan → eksekusi dengan tools → deliverable nyata).</li></ul>
+<p><strong>Prinsip produk yang mengunci semua keputusan:</strong></p>
+<ol><li><strong>BYOE (Bring Your Own Everything)</strong> — gratis by default; semua model/search/image/tool pakai base_url + API key milik user. Cuda tidak menyediakan token, tidak ada markup, tidak ada kuota.</li><li><strong>Local-first, desktop-first</strong> — data di SQLite lokal + IndexedDB browser; PWA di v1; nanti di-package jadi software desktop.</li><li><strong>Skills, bukan prompt library</strong> — kemampuan dipanggil dengan <code>/</code> dan Cuda bisa <strong>menulis skill sendiri</strong> setelah misi sukses.</li><li><strong>Pisahkan conversation stream dari activity stream</strong> (keputusan riset) — Cuda Agent = 3-pane, bukan chat.</li><li><strong>Setiap aksi punya struk + undo</strong> — trust dibangun dari transparansi, bukan dari output yang kelihatan pintar.</li></ol>
+<p><strong>Tech Stack (final):</strong> Next.js 16 (App Router) · TypeScript · Tailwind 4 + komponen sendiri (Radix primitives) · Prisma + SQLite · Zustand + TanStack Query · Zod (kontrak event) · Fastify + <code>ws</code> (agent-node) · CodeMirror 6 · xterm.js · sandboxed iframe + postMessage (artifact) · Playwright (browser tool) · i18n (EN default, ID switch) · Vitest + Playwright (test) · npm workspaces (monorepo).</p>
+<hr>
+<h2 id="1-arsitektur-v2">1. Arsitektur v2</h2>
+<pre><code>┌──────────────────────────────────────────────────────────────────────┐
+│  apps/web  (Next.js 16)  →  Vercel                                   │
+│  /  (landing + demo)   /ai  (Cuda AI)   /agent  (Cuda Agent)         │
+│  /settings  /skills  /memory  /missions  /share/*                    │
+│  /api/chat (SSE)  /api/agent/* (proxy + WS)  /api/upload             │
+└───────────┬──────────────────────────────────────┬───────────────────┘
+            │ SSE (chat)                            │ WS (agent events)
+            ▼                                       ▼
+┌───────────────────────────┐        ┌──────────────────────────────────┐
+│  LLM Router (core)        │        │  apps/agent-node (Fastify + ws)  │
+│  provider dari USER:      │◀───────│  • Orchestrator (plan/exec/replan)│
+│  base_url + api_key       │        │  • Tool registry + sandbox        │
+│  fallback chain (user)    │        │  • Event bus (Zod, append-only)   │
+│  prompt cache (opt, off)  │        │  • Checkpoint (git) + receipt     │
+└───────────────────────────┘        └───────┬──────────────────────────┘
+                                             │
+                        ┌────────────────────┴─────────────────┐
+                        ▼                                      ▼
+              workspaces/&lt;mission-id&gt;/                 SQLite (Prisma)
+              (files, git repo, artifacts)      users, providers, keys,
+                                                threads, artifacts, memory,
+                                                missions, events, skills</code></pre>
+<p><strong>Deployment v1:</strong> <code>apps/web</code> → Vercel (project <code>cuda</code>) · <code>apps/agent-node</code> → <strong>box dev ini</strong> (port 9400, pm2) · DB → SQLite · storage → lokal · backup → GitHub (repo private <code>Xiaochown/cuda</code>).</p>
+<p><strong>Kalau agent-node mati:</strong> Cuda AI tetap jalan penuh (chat tidak butuh node), Cuda Agent menampilkan status "agent node offline" + tombol retry. <em>(#63)</em></p>
+<hr>
+<h2 id="2-design-token-final-sesuai-jawaban-6">2. Design token (final, sesuai jawaban #6)</h2>
+<pre><code>:root[data-theme="dark"]{
+  --bg:#0d0d0d; --bg-elev:#141517; --surface:#1a1c1f; --surface-2:#22252a;
+  --border:#2b2f36; --border-strong:#3a3f47;
+  --text:#ececf1; --text-dim:#a0a6b0; --text-mute:#6e747e;
+  --accent:#2563eb; --accent-hover:#3b82f6; --accent-soft:#1e293b;
+  --run:#f5a524; --ok:#22c55e; --err:#ef4444; --wait:#38bdf8; --idle:#6b7280;
+}
+:root[data-theme="light"]{
+  --bg:#ffffff; --bg-elev:#f7f7f8; --surface:#ffffff; --surface-2:#f0f0f2;
+  --border:#e3e3e6; --border-strong:#cfcfd4;
+  --text:#0d0d0d; --text-dim:#5b6068; --text-mute:#8b9099;
+  --accent:#2563eb; --accent-hover:#1d4ed8; --accent-soft:#eef2ff;
+}
+--r-sm:6px; --r:10px; --r-lg:14px; --font:Inter; --mono:"JetBrains Mono",ui-monospace;</code></pre>
+<ul><li>Tema <strong>ikut sistem</strong> + toggle manual + light mode di v1 (#203, #204).</li><li><strong>Satu accent midnight blue</strong>, bukan dua warna. <strong>Ikon model/brand full-color</strong> (devicon/simple-icons).</li><li>Cuda AI: density lega, jawaban AI polos (bukan bubble). Cuda Agent: density padat, mono untuk log/aksi, badge status warna.</li></ul>
+<hr>
+<h2 id="3-cuda-ai-spec-v1-ai">3. Cuda AI — spec v1 (<code>/ai</code>)</h2>
+<p><strong>Layout:</strong> sidebar (Percakapan + Ruang Kerja/Projects + Skills + Memory) · thread · panel kanan <strong>Artifacts</strong> (collapsible; mobile = bottom sheet).</p>
+<p><strong>Wajib v1:</strong></p>
+<ul><li>Thread: list + grup waktu, search <strong>full-text + semantik</strong>, pin, arsip, hapus massal, rename.</li><li><strong>Projects/Ruang Kerja</strong>: custom instruction permanen + file knowledge + scope memory sendiri.</li><li><strong>Folder</strong> untuk organisasi percakapan.</li><li>Composer: attach semua tipe (≤50MB) + <strong>OCR</strong> untuk PDF scan/gambar, Enter=kirim, draft auto-save (server+lokal), persona chips generik, <strong>slash command <code>/</code> = skills + help + plugin</strong>.</li><li>Toggle: 🔎 Web Search (<strong>multi-engine gratis</strong>: DuckDuckGo/Brave/Firecrawl — user pilih engine, default ON) · 🧠 Deep Research · 🖼 Image Gen (via custom key: sunburst/flare/gpt-image-2.0) · 🎙 STT Indonesia · 🔊 TTS Indonesia.</li><li>Model picker: <strong>provider milik user</strong> (base_url + key + model list diambil dari <code>/models</code>), fallback chain diatur user, label "served by &lt;provider&gt;" di bawah jawaban.</li><li>Pesan: streaming, stop, regenerate, <strong>edit → fork cabang</strong>, continue-generating, rating 👍👎, sitasi bernomor, markdown+tabel+kode+Mermaid+LaTeX.</li><li><strong>Artifacts</strong>: auto-<strong>tanya</strong> dulu sebelum dibuka (#95), versioning <strong>tak terbatas</strong>, targeted edit (highlight → ubah), edit manual, download, <strong>Publish → <code>/share/a/&lt;slug&gt;</code></strong> (bisa dicabut), halaman <strong>galeri artifact</strong>, render di sandboxed iframe.</li><li><strong>Memory</strong>: halaman CRUD, scope gabungan (global/workspace/thread), penjelasan "kenapa diingat" + sumber, <strong>tanpa kadaluwarsa otomatis</strong>, <strong>import riwayat dari ChatGPT/Hermes</strong>.</li><li>Export PDF berbrand + MD/JSON, share thread (harus klik Publish), token/cost meter, keyboard shortcuts + cheat sheet, onboarding wizard, i18n EN/ID.</li></ul>
+<p><strong>Tidak ada di v1:</strong> compare mode (#32), mode sementara (#94), prompt library (#78 → skills), API publik OpenAI-compatible (#49).</p>
+<hr>
+<h2 id="4-cuda-agent-spec-v1-agent">4. Cuda Agent — spec v1 (<code>/agent</code>)</h2>
+<p><strong>Layout 3-pane</strong> (bukan chat):</p>
+<pre><code>┌──────────────┬────────────────────────────────┬─────────────────────────┐
+│ MISSIONS     │ ACTIVITY                       │ WORKSPACE               │
+│ + New Mission│ ┌ Brief &amp; steering (chat)      │ [Files][Editor][Preview]│
+│ ────────     │ ├ Plan (checklist + approve)   │ [Terminal][Browser]     │
+│ ● Research…  │ ├ Timeline (kartu terbuka)     │ [Deliverables]          │
+│ ● Scrape…    │ │  ✓ step · ⏳ tool call       │                         │
+│ ○ Build…     │ │  ⛔ PERMISSION NEEDED        │ workspace/              │
+│ Board view   │ ├ Evidence (sources+rationale) │  report.md · data.csv   │
+│              │ └ Deliverables + Receipts      │  preview/index.html     │
+├──────────────┴────────────────────────────────┴─────────────────────────┤
+│ ▶ Run │ ⏸ Pause │ ⏹ Stop │ Autonomy: [Suggest|Draft|Execute] │ 18/100    │
+└──────────────────────────────────────────────────────────────────────────┘</code></pre>
+<p><strong>Wajib v1 (semua sudah dikonfirmasi user):</strong></p>
+<ol><li>Mission dari <strong>form goal</strong> atau naik dari chat biasa (#109).</li><li><strong>Plan wajib + approval</strong> sebelum eksekusi (#110); setelah approve, aksi berisiko tetap minta izin (#111).</li><li><strong>Board (kanban)</strong> + <strong>timeline kartu terbuka</strong> + <strong>current step pinned</strong> (#112–#114).</li><li>Estimasi <strong>waktu</strong> sebelum jalan (#115).</li><li>Retry <strong>3x → eskalasi</strong> (#116); agent <strong>sangat boleh</strong> bertanya balik (#121).</li><li>Batas: <strong>150 langkah · 100 aksi · tanpa batas waktu · tanpa batas biaya</strong> (#117–#120) + guard di §7 F2.</li><li><strong>Mode diskusi</strong> (ngobrol tanpa eksekusi) (#122), <strong>fork misi</strong> (#123), <strong>banding 2 rencana dengan tombol</strong> (#124).</li><li><strong>Permission matrix per tool</strong> (always/ask/never) yang bisa diubah user (#129), izin <strong>selalu tanya ulang</strong> (#130), <strong>mode paranoid</strong> &amp; <strong>mode gas</strong> (#131, #132), izin ditolak → <strong>tanya alternatif</strong> (#133), kartu izin <strong>auto-pause 5 menit</strong> (#134).</li><li><strong>Autonomy</strong>: Suggest / Draft / Execute, mengikuti permission yang diberikan user (#127). Aksi sensitif yang wajib izin: deploy, hapus, kirim keluar, bayar, network keluar, tulis file di luar workspace (#128).</li><li><strong>Receipt + Undo</strong> (git-based) untuk setiap aksi (#140, #141), <strong>checkpoint</strong> (simpan 20, auto-prune) (#142, #143).</li><li><strong>Audit trail exportable</strong> JSON/PDF (#140), log <strong>diredact</strong> (API key/token otomatis disensor) (#139).</li><li><strong>Credential vault</strong>: user boleh simpan API key untuk tool — <strong>terenkripsi, hanya user yang bisa lihat</strong> (#146).</li><li><strong>Multi-sesi paralel</strong> (#35), <strong>cron/scheduled missions</strong> (#37), <strong>webhook trigger</strong>, <strong>monitoring + alert</strong> (#159).</li><li><strong>Deliverables</strong>: format bebas (#125), bisa dikirim ke <strong>Telegram/WA</strong> (#126).</li><li>Workspace viewer: file tree, CodeMirror editor, diff, live preview, terminal xterm.js, browser (screenshot stream).</li><li><strong>Skills</strong>: Cuda boleh <strong>menyimpan playbook/skill dari misi sukses</strong> (#162) dan menjalankan skrip/plugin custom (#163).</li></ol>
+<hr>
+<h2 id="5-agent-event-protocol-kontrak-inti-tidak-berubah">5. Agent Event Protocol (kontrak inti — tidak berubah)</h2>
+<pre><code>type AgentEvent =
+  | { t:'mission.started'; id:string; goal:string; model:string; autonomy:Autonomy; limits:Limits }
+  | { t:'plan.created';   steps:Step[] }
+  | { t:'plan.updated';   stepId:string; status:StepStatus; note?:string }
+  | { t:'plan.compared';  a:string; b:string; chosen?:'a'|'b' }         // fitur banding rencana
+  | { t:'step.started';   stepId:string; title:string; startedAt:number }
+  | { t:'thought';        stepId:string; summary:string }               // ringkas, bukan CoT mentah
+  | { t:'tool.call';      stepId:string; callId:string; tool:string; args:unknown; preview:string }
+  | { t:'tool.result';    callId:string; ok:boolean; ms:number; result:unknown; error?:string }
+  | { t:'artifact.new';   artifactId:string; kind:ArtifactKind; name:string; url:string; bytes:number }
+  | { t:'artifact.diff';  artifactId:string; from:string; to:string; patch:string }
+  | { t:'permission.req'; id:string; action:string; risk:'low'|'med'|'high'; impact:string; options:string[] }
+  | { t:'permission.res'; id:string; decision:'allow'|'deny'|'edit'; payload?:unknown }
+  | { t:'checkpoint';     id:string; label:string; gitSha:string }
+  | { t:'receipt';        actionId:string; summary:string; changed:string[]; permission:string; undoable:boolean }
+  | { t:'budget.tick';    steps:number; stepsMax:number; actions:number; actionsMax:number; msElapsed:number }
+  | { t:'escalation';     question:string; options:string[] }
+  | { t:'skill.learned';  skillId:string; name:string; fromMission:string }   // self-extending skills
+  | { t:'mission.paused'|'mission.resumed'|'mission.done'|'mission.failed'; id:string; summary?:string }</code></pre>
+<p>Sifat: <strong>append-only, idempotent, replayable</strong> → semua event disimpan di <code>AgentEventRow</code> sehingga timeline bisa di-replay, misi bisa di-fork, dan debugging time-travel mungkin.</p>
+<hr>
+<h2 id="6-data-model-prisma-v2">6. Data model (Prisma, v2)</h2>
+<pre><code>model User        { id, email?, handle?, avatarUrl?, createdAt }
+model Provider    { id, userId, label, baseUrl, apiKeyEnc, kind:"openai"|"anthropic"|"gemini"|"custom", models Json, isDefault }
+model SearchCfg   { id, userId, engine:"ddg"|"brave"|"firecrawl", apiKeyEnc?, enabled }
+model Workspace   { id, userId, name, kind:"ai"|"agent", instructions, rules Json }
+model Thread      { id, userId, workspaceId?, folderId?, title, model, pinned, archived, createdAt }
+model Folder      { id, userId, name, parentId? }
+model Message     { id, threadId, parentId?, role, content, model, providerId?, tokensIn, tokensOut, branchIndex, createdAt }
+model Artifact    { id, userId, threadId?, missionId?, name, kind, currentVersionId, publicSlug?, published }
+model ArtifactVer { id, artifactId, seq, content, lang, createdAt }
+model MemoryFact  { id, userId, workspaceId?, threadId?, subject, predicate, object, sourceType, sourceRef, createdAt }  // no expiry
+model Skill       { id, userId, name, slug, description, body, tools Json, trigger Json, version, source:"user"|"generated"|"marketplace", enabled }
+model Mission     { id, userId, workspaceId, goal, status, autonomy, providerId?, model, stepsMax, actionsMax,
+                    stepsUsed, actionsUsed, startedAt, endedAt, gitDir, forkOf?, forkedAtStep? }
+model MissionStep { id, missionId, idx, title, status, startedAt, endedAt, note }
+model AgentEventRow { id, missionId, seq, type, payload Json, createdAt }
+model Permission  { id, missionId, action, risk, impact, decision, decidedAt, payload Json, autoPaused:Boolean }
+model ToolPerm    { id, userId, tool, mode:"always"|"ask"|"never" }
+model Checkpoint  { id, missionId, label, gitSha, createdAt }
+model Receipt     { id, missionId, actionId, summary, changed Json, permission, undoable, undoneAt? }
+model Secret      { id, userId, label, valueEnc, iv, scope }   // AES-256-GCM, key dari env server
+model Schedule    { id, userId, missionId?, goalTemplate, cron, nextRunAt, enabled }
+model Webhook     { id, userId, url, secret, events Json, enabled }</code></pre>
+<p>Index: <code>AgentEventRow(missionId, seq)</code> · <code>Message(threadId, createdAt)</code> · FTS5 untuk thread + memory.</p>
+<hr>
+<h2 id="7-keamanan-permission-dengan-guard-dari-flag-f1">7. Keamanan &amp; permission (dengan guard dari flag F1)</h2>
+<ul><li><strong>Sandbox v1 (tanpa Docker):</strong> workspace per-misi, path-traversal guard, command <strong>allowlist</strong>, timeout per aksi, rlimit (CPU/mem), output cap, env bersih.</li><li><strong>Akses folder:</strong> default workspace misi; boleh lebih luas <strong>hanya bila user setujui</strong> (per-misi, tercatat di audit) (#135).</li><li><strong>sudo (#137):</strong> <strong>default OFF</strong>. Untuk menyalakan: Settings → Security → toggle "Allow sudo" dengan peringatan eksplisit + konfirmasi ketik ulang. Semua pemakaian sudo dicatat di audit log + muncul di timeline sebagai kartu merah.</li><li><strong>Command berbahaya (#138):</strong> <code>rm -rf /</code>, <code>dd</code>, <code>curl|bash</code>, <code>chmod 777</code>, <code>mkfs</code>, fork bomb → <strong>konfirmasi kedua</strong> (user harus ketik ulang perintahnya), bukan auto-block.</li><li><strong>Mode gas (#132):</strong> boleh, tapi wajib banner merah "FULL AUTO — no confirmations" + kill switch selalu terlihat.</li><li><strong>Secret:</strong> AES-256-GCM at-rest, key dari env server, <strong>tidak pernah</strong> dikirim ke frontend dalam bentuk plaintext, diredact otomatis di log/event/audit (#139, #146).</li><li><strong>Kill switch</strong> global (⏹ Stop) → membatalkan tool in-flight, membuang antrean, menyimpan checkpoint terakhir.</li><li><strong>Guard budget (#117–#120):</strong> karena tanpa batas waktu/biaya, tambahkan: warning di 80% aksi, auto-pause kalau <strong>5 menit tanpa progres</strong> (bukan batas keras, bisa dilanjut), dan ringkasan biaya token di akhir misi.</li></ul>
+<hr>
+<h2 id="8-skill-engine-pengganti-prompt-library">8. Skill Engine (pengganti prompt library)</h2>
+<ul><li><strong>Format:</strong> <code>SKILL.md</code> (frontmatter: name, description, triggers, tools, version) + folder <code>references/</code> &amp; <code>scripts/</code>.</li><li><strong>Pemanggilan:</strong> <code>/skill-name</code> di composer (AI maupun Agent), atau trigger otomatis dari deskripsi.</li><li><strong>Sumber skill:</strong> (a) bawaan (6 playbook v1), (b) <strong>digenerate Cuda</strong> setelah misi sukses (<code>skill.learned</code> event + kartu "simpan jadi skill?"), (c) user bikin sendiri di <code>/skills</code>, (d) marketplace (v2).</li><li><strong>Tool grants:</strong> skill mendeklarasikan tool yang dibutuhkan; saat dijalankan, permission diminta sekali per skill (tetap bisa di-override per misi).</li><li><strong>Versioning + rollback</strong> + enable/disable per skill.</li><li><strong>6 skill bawaan v1:</strong> <code>deep-research</code> · <code>scrape-to-dataset</code> · <code>build-and-deploy-site</code> · <code>monitor-and-alert</code> · <code>osint-dossier</code> (pakai scam-hunt) · <code>doc-pipeline</code> (PDF/DOCX/XLSX/convert).</li></ul>
+<hr>
+<h2 id="9-tool-layer-v1">9. Tool layer v1</h2>
+<table><thead><tr><th>Tool</th><th>Fungsi</th><th>Default permission</th></tr></thead><tbody><tr><td><code>fs</code></td><td>read/write/patch/glob/grep di workspace</td><td>read=always, write=ask</td></tr><tr><td><code>shell</code></td><td>bash (allowlist, timeout, rlimit)</td><td>ask</td></tr><tr><td><code>python</code></td><td>eksekusi skrip di workspace</td><td>ask</td></tr><tr><td><code>web_search</code></td><td>multi-engine (DDG/Brave/Firecrawl), user-configurable</td><td>always</td></tr><tr><td><code>web_fetch</code></td><td>scrape → markdown (Firecrawl)</td><td>always</td></tr><tr><td><code>browser</code></td><td>Playwright: open, click, fill, screenshot, extract</td><td>ask</td></tr><tr><td><code>image_gen</code></td><td>via provider user (sunburst/flare/gpt-image-2.0)</td><td>always</td></tr><tr><td><code>document</code></td><td>PDF/DOCX/XLSX + convert (pandoc/libreoffice)</td><td>always</td></tr><tr><td><code>data</code></td><td>CSV/JSON/XML/XLSX olah besar (100k baris)</td><td>always</td></tr><tr><td><code>sql</code></td><td>query SQLite lokal + NL→SQL</td><td>ask</td></tr><tr><td><code>rag</code></td><td>tanya-jawab atas file workspace (index ringan)</td><td>always</td></tr><tr><td><code>git</code></td><td>init/commit/branch/diff/restore (+auto-push opsional)</td><td>always (lokal), ask (push)</td></tr><tr><td><code>deploy</code></td><td>Vercel / GitHub Pages</td><td>ask</td></tr><tr><td><code>notify</code></td><td>Telegram / WhatsApp / webhook</td><td>ask</td></tr><tr><td><code>monitor</code></td><td>uptime check + change detection + alert</td><td>always</td></tr><tr><td><code>osint</code></td><td>scam-hunt pipeline</td><td>ask</td></tr><tr><td><code>mcp</code></td><td>MCP client (v2)</td><td>ask</td></tr><tr><td><code>http</code></td><td>request API eksternal</td><td>ask</td></tr></tbody></table>
+<p>Tidak dibuat: scraper IG/TikTok (#160).</p>
+<hr>
+<h2 id="10-route-map-v2">10. Route map v2</h2>
+<pre><code>/                     landing lengkap + demo interaktif
+/ai                   Cuda AI  · /ai/c/[threadId] · /ai/a/[artifactId]
+/agent                Cuda Agent · /agent/m/[missionId] (3-pane console)
+/agent/board          Board view (kanban misi)
+/missions             riwayat misi + replay + biaya
+/skills               skill manager (list, edit, generate, versioning)
+/memory               memory CRUD + "kenapa diingat"
+/settings             provider &amp; key, search engine, permissions, tema, bahasa, keamanan (sudo/dangerous)
+/share/c/[slug]       thread publik   ·  /share/a/[slug]  artifact publik
+/api/chat             SSE proxy → provider user (fallback chain)
+/api/agent/*          proxy + WS ke agent-node (HMAC)
+/api/upload           upload file
+/api/import           import riwayat ChatGPT/Hermes</code></pre>
+<hr>
+<h2 id="11-rencana-14-hari-bite-sized-commit-tiap-task">11. Rencana 14 hari (bite-sized, commit tiap task)</h2>
+<h3 id="hari-1-2-p0-fondasi">Hari 1–2 · P0 Fondasi</h3>
+<ol><li><code>gh repo create Xiaochown/cuda --private</code>, init monorepo npm workspaces (<code>apps/<em></code>, <code>packages/</em></code>), tsconfig base, eslint/prettier, <code>.gitignore</code>.</li><li><code>packages/core</code>: <code>events.ts</code> (union <code>AgentEvent</code>) + test Zod tiap varian (<strong>RED→GREEN</strong>).</li><li><code>packages/core</code>: <code>tools.ts</code> (registry + skema argumen + default permission) + test.</li><li><code>packages/core</code>: <code>router.ts</code> — provider dari user (base_url/key), fallback chain, streaming; test dengan mock fetch (200/400/429/timeout).</li><li><code>packages/core</code>: <code>skills.ts</code> — parser SKILL.md + matcher trigger + test.</li><li>Prisma schema v2 + migration <code>init</code> (SQLite) + seed 6 skill bawaan.</li><li>Commit: <code>chore: bootstrap monorepo + core contracts</code>.</li></ol>
+<h3 id="hari-3-6-p1-cuda-ai-inti">Hari 3–6 · P1 Cuda AI (inti)</h3>
+<ol><li><code>apps/web</code> Next.js 16 + Tailwind 4 + token §2 + layout sidebar/thread + i18n (EN default).</li><li><code>/api/chat</code> SSE route → router (provider user) — verifikasi curl streaming.</li><li>Thread UI: streaming, markdown/highlight/tabel/Mermaid, stop, regenerate, continue, rating, fork cabang.</li><li>Sidebar: list + grup waktu + folder + pin/arsip/hapus massal + search FTS5.</li><li>Projects/Ruang Kerja + custom instruction.</li><li>Composer: attach (≤50MB) + OCR, model picker (dari provider user), slash <code>/</code> skills, persona chips, toggles (search/deep-research/image/STT/TTS).</li><li>Settings: provider CRUD + test koneksi + fallback chain + search engine + tema + bahasa.</li><li><strong>Skills UI</strong>: <code>/skills</code> list/edit/generate + slash command runner.</li><li>Artifacts: entitas + versioning + sandbox iframe + targeted edit + publish <code>/share/a/[slug]</code> + galeri.</li><li>Memory: extractor + halaman CRUD + "kenapa diingat" + import riwayat.</li><li>Export PDF/MD/JSON + share thread + token/cost meter + onboarding wizard.</li><li>Commit per fitur + verifikasi curl semua route.</li></ol>
+<h3 id="hari-7-11-p2-cuda-agent">Hari 7–11 · P2 Cuda Agent</h3>
+<ol><li><code>apps/agent-node</code>: Fastify + ws + auth HMAC + healthcheck + <code>workspaces/</code>.</li><li>Orchestrator: goal → planner (JSON tervalidasi Zod) → executor → replan; test mock LLM.</li><li>Event bus append-only + persist + endpoint replay + fork misi.</li><li>Sandbox: workspace per-misi, traversal guard, allowlist, timeout, rlimit, output cap; <strong>test negatif</strong> (<code>../../etc/passwd</code>, <code>;</code>, backtick, symlink escape, fork bomb).</li><li>Tools v1 (fs, shell, python, web_search, web_fetch, browser, document, data, git, rag) + test tiap tool.</li><li>Permission engine: request/response, auto-pause 5 menit, deny→alternatif, matriks per tool, mode paranoid/gas, sudo guard, konfirmasi kedua.</li><li>Budget/limits + warning 80% + auto-pause tanpa progres + kill switch.</li><li>Checkpoint (git per langkah, simpan 20) + restore + <strong>Receipt + Undo</strong>.</li><li><strong>Skill generator</strong>: setelah misi sukses → usul skill baru (<code>skill.learned</code>).</li><li>Cron/schedule + webhook trigger + monitoring/alert tool.</li><li>Commit.</li></ol>
+<h3 id="hari-12-14-p3-ui-agent-polish-deploy">Hari 12–14 · P3 UI Agent + polish + deploy</h3>
+<ol><li>Layout 3-pane + Missions list + Board (kanban) + status bar (Run/Pause/Stop, autonomy, meter).</li><li>Activity timeline: semua varian event → kartu (step, tool call expandable, thought, receipt+undo, permission, escalation, skill.learned) + current step pinned + filter.</li><li>Kartu <strong>PERMISSION NEEDED</strong> (dampak + risiko + Setujui/Edit/Tolak + countdown 5 menit).</li><li>Workspace viewer: file tree, CodeMirror, diff, live preview, terminal xterm.js, browser view.</li><li>Plan compare (banding 2 rencana) + fork misi UI + mode diskusi.</li><li>Deliverables + tombol kirim Telegram/WA + audit export (JSON/PDF).</li><li>Mobile: Cuda Agent tab bar (Missions/Activity/Workspace/Deliverables) + sheet permission; Cuda AI 1 kolom; PWA installable + offline read.</li><li>Light mode polish, empty/error/loading state, ilustrasi custom, suara notifikasi, push browser, shortcut + cheat sheet.</li><li>Deploy: web → Vercel; agent-node → pm2 di box + tunnel/port; smoke test end-to-end.</li><li>Load test 10 misi paralel + CI/CD GitHub Actions + staging + help center + changelog + halaman status.</li></ol>
+<p><strong>Buffer:</strong> kalau mepet, yang boleh digeser ke minggu ke-3: cron/webhook, import riwayat, monitoring tool, Board view, skill generator (semua non-blocker inti).</p>
+<hr>
+<h2 id="12-verifikasi">12. Verifikasi</h2>
+<ul><li>Unit: Vitest untuk <code>packages/core</code> (events, router fallback, skills parser) + <code>agent-node</code> (orchestrator, permission, budget, sandbox).</li><li><strong>Sandbox security test wajib lulus:</strong> traversal, injection, symlink, resource bomb, egress tanpa izin, sudo tanpa opt-in.</li><li>E2E: chat streaming, artifact render+publish, misi end-to-end menghasilkan file nyata, pause/stop/resume, permission ditolak → alternatif, restore checkpoint, fork misi, replay misi, skill baru terpakai.</li><li>Semua route + aset <code>curl -o /dev/null -w '%{http_code}'</code> = 200 sebelum klaim selesai.</li><li>Uji nyata di HP (user akses via Telegram) untuk Cuda AI &amp; Cuda Agent mobile.</li></ul>
+<hr>
+<h2 id="13-risiko">13. Risiko</h2>
+<table><thead><tr><th>Risiko</th><th>Mitigasi</th></tr></thead><tbody><tr><td><strong>Disk rootfs 99% penuh (2.6 GB)</strong></td><td>Butuh ~5 GB: relokasi artefak ke <code>/sdcard</code>, hapus project lama, atau build di laptop. <strong>Ini prasyarat P0.</strong></td></tr><tr><td>Tanpa Docker → sandbox lebih lemah</td><td>Process-level + allowlist + rlimit v1; Docker/E2B di v2 (fondasi network namespace sudah disiapkan)</td></tr><tr><td>sudo + mode gas (permintaan user)</td><td>Default OFF + opt-in sadar + konfirmasi kedua + audit log + kill switch</td></tr><tr><td>BYO key → user baru bingung</td><td>Onboarding wizard + preset provider + mode tamu + halaman bantuan</td></tr><tr><td>Target 1.000 user/3 bulan tanpa model bawaan</td><td>Fokus landing + demo interaktif + template skill siap pakai</td></tr><tr><td>150 langkah/100 aksi tanpa batas waktu</td><td>Warning 80%, auto-pause tanpa progres, ringkasan biaya</td></tr><tr><td>Scope agent sangat luas (500+ capability di #17)</td><td>Capability map bertahap (DECISIONS §5): v1 = 16 grup inti, sisanya v2/v3</td></tr><tr><td>Multi-agent "sangat perlu" tapi MVP 2 minggu</td><td>Fondasi role/A2A/shared-workspace di v1, swarm penuh v2</td></tr></tbody></table>
+<hr>
+<h2 id="14-perlu-konfirmasi-singkat-bukan-blocker-kalau-dijawab-defa">14. Perlu konfirmasi singkat (bukan blocker kalau dijawab "default")</h2>
+<ul><li><strong>F1</strong> sudo: oke default OFF + opt-in sadar? <em>(rekomendasi gue: ya)</em></li><li><strong>F3</strong> mesin agent-node: <strong>box Linux ini</strong> (bisa langsung kerja) atau laptop Windows (butuh sesi Hermes di mesin itu)?</li><li><strong>F4</strong> markup 10% ditunda sampai Cuda jual token — oke?</li><li><strong>F6</strong> disk: boleh gue relokasi/bersihkan supaya ada ~5 GB ruang?</li></ul>
+<p>Kalau jawabannya "default semua" → gue mulai P0 hari 1 sekarang.</p>
+<footer>Cuda — plan v1.0 · dibuat 23 Sep 2026 · sumber riset: Firecrawl (lihat <a href="research.html">Riset &amp; Sumber</a>)</footer>
+</main></div></body></html>

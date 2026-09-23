@@ -1,0 +1,99 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup — Cuda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d10;--surface:#15171b;--surface2:#1b1e23;--border:#2a2e35;--border2:#343941;
+--text:#e6e8eb;--dim:#9aa3af;--mute:#6b7280;--accent:#5e6ad2;--accent2:#8b5cf6;--blue:#4f8cff;
+--ok:#22c55e;--warn:#f5a524;--err:#ef4444;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{display:flex;max-width:1400px;margin:0 auto;gap:0}
+nav{position:sticky;top:0;align-self:flex-start;width:290px;flex:0 0 290px;height:100vh;overflow-y:auto;
+padding:26px 18px 60px;border-right:1px solid var(--border);background:#0d0f13}
+nav .brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+nav .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+nav .brand b{font-size:15px;letter-spacing:-.2px}
+nav .brand span{display:block;font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+nav a{display:block;color:var(--dim);font-size:13px;padding:4px 8px;border-radius:6px;margin:1px 0}
+nav a:hover{background:var(--surface);color:var(--text);text-decoration:none}
+nav .sec{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:16px 8px 6px}
+main{flex:1;min-width:0;padding:44px 46px 120px;max-width:1000px}
+.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:34px;line-height:1.2;letter-spacing:-.7px;margin:10px 0 6px}
+h2{font-size:21px;letter-spacing:-.35px;margin:52px 0 12px;padding-top:20px;border-top:1px solid var(--border)}
+h3{font-size:16.5px;margin:30px 0 8px}
+h4{font-size:14.5px;margin:22px 0 6px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+p{margin:11px 0}
+ul,ol{margin:11px 0;padding-left:22px}li{margin:5px 0}
+code{font-family:var(--mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border);
+padding:1.5px 5px;border-radius:5px;color:#c9d1d9}
+pre{background:#0f1216;border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;margin:16px 0}
+pre code{background:none;border:0;padding:0;font-size:12.5px;line-height:1.6;color:#c9d1d9;white-space:pre}
+blockquote{margin:16px 0;padding:12px 18px;border-left:2px solid var(--accent2);background:#12141a;
+border-radius:0 8px 8px 0;color:#cfd4dc}
+blockquote p{margin:4px 0}
+hr{border:0;border-top:1px solid var(--border);margin:34px 0}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+th,td{border:1px solid var(--border);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--surface);color:var(--dim);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+tr:nth-child(even) td{background:#101216}
+strong{color:#fff;font-weight:600}
+.hero{background:linear-gradient(180deg,#141821,#0e1116);border:1px solid var(--border);border-radius:14px;
+padding:26px 28px;margin:0 0 30px}
+.hero .sub{color:var(--dim);font-size:15px;margin:8px 0 0}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.badge{font-size:11.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);color:var(--dim);
+background:#12151b}
+.badge.b{border-color:#2a4a7a;color:#8ab4f8}.badge.v{border-color:#4a3170;color:#c4a6ff}
+.badge.g{border-color:#1f5136;color:#7ee2a8}.badge.a{border-color:#5c4318;color:#f3c078}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:20px 0}
+figure{margin:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+figure img{width:100%;display:block}
+figcaption{padding:10px 14px;font-size:12.5px;color:var(--dim);border-top:1px solid var(--border)}
+.note{border:1px solid #4a3170;background:#161226;border-radius:10px;padding:14px 18px;margin:20px 0}
+.note b{color:#c4a6ff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:16px 18px}
+.card h3{margin:0 0 8px;font-size:15px}
+.card ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+footer{color:var(--mute);font-size:12.5px;border-top:1px solid var(--border);margin-top:60px;padding-top:20px}
+@media(max-width:960px){nav{display:none}main{padding:26px 18px 90px}h1{font-size:26px}.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<nav><div class="brand"><div class="mark">C</div><div><b>Cuda</b><span>plan &amp; riset</span></div></div><a href="decisions.html">✅ Keputusan Terkunci</a><a href="index.html">📋 Plan Implementasi v2</a><a href="research.html">🔎 Riset &amp; Sumber</a><a href="mockups.html">🎨 Mockup</a><a href="questionnaire/">📝 Kuesioner 262 Pertanyaan</a><div class="sec">Isi halaman</div></nav>
+<main><div class="kicker">cuda · arah visual</div><p>&lt;h1&gt;Mockup Visual&lt;/h1&gt;&lt;div class="hero"&gt;&lt;p class="sub"&gt;Tiga arah tampilan yang digenerate dengan</p>
+<p>&lt;code&gt;gpt-image-2.5-sunburst&lt;/code&gt;. Ini acuan visual untuk build nyata — token warna, layout, dan komponen</p>
+<p>akan diambil dari sini.&lt;/p&gt;&lt;/div&gt;</p>
+<p>&lt;h2&gt;1 · Cuda Agent — Desktop (console 3-pane)&lt;/h2&gt;</p>
+<p>&lt;p&gt;Perhatikan: &lt;strong&gt;activity timeline terpisah dari chat&lt;/strong&gt; (keputusan arsitektur utama), kartu</p>
+<p>&lt;strong&gt;BUTUH IZIN&lt;/strong&gt; dengan tombol Setujui/Edit/Tolak, kartu &lt;strong&gt;Struk aksi&lt;/strong&gt; dengan diff +</p>
+<p>Undo, kontrol Jalan/Jeda/Stop, slider otonomi, dan meter budget.&lt;/p&gt;</p>
+<p>&lt;figure&gt;&lt;img src="mockups/cuda-agent-desktop.jpg" alt="Cuda Agent desktop console"&gt;</p>
+<p>&lt;figcaption&gt;Cuda Agent · desktop · accent violet #8b5cf6 · timeline + workspace + approval + receipt&lt;/figcaption&gt;&lt;/figure&gt;</p>
+<p>&lt;h2&gt;2 · Cuda Agent — Mobile&lt;/h2&gt;</p>
+<p>&lt;p&gt;Tab bar (Misi/Aktivitas/Workspace/Akun), kartu timeline versi mobile, sheet izin dengan tiga tombol</p>
+<p>full-width, dan meter budget menempel di atas tab bar.&lt;/p&gt;</p>
+<p>&lt;figure&gt;&lt;img src="mockups/cuda-agent-mobile.jpg" alt="Cuda Agent mobile"&gt;</p>
+<p>&lt;figcaption&gt;Cuda Agent · mobile · timeline + kartu izin + tab bar&lt;/figcaption&gt;&lt;/figure&gt;</p>
+<p>&lt;h2&gt;3 · Cuda AI — Desktop (workspace chat)&lt;/h2&gt;</p>
+<p>&lt;p&gt;Idiom ChatGPT/Claude: sidebar percakapan + Ruang Kerja, jawaban AI polos (bukan bubble), tabel markdown,</p>
+<p>sitasi bernomor, composer pill mengambang dengan chip model &amp;amp; toggle konteks 1M, dan panel kanan</p>
+<p>&lt;strong&gt;Hasil&lt;/strong&gt; berisi artifact dengan version strip v1/v2/v3 + tombol Publish.&lt;/p&gt;</p>
+<p>&lt;figure&gt;&lt;img src="mockups/cuda-ai-desktop.jpg" alt="Cuda AI desktop"&gt;</p>
+<p>&lt;figcaption&gt;Cuda AI · desktop · accent biru #4f8cff · chat + artifact panel&lt;/figcaption&gt;&lt;/figure&gt;</p>
+<p>&lt;h2&gt;Yang perlu lo putuskan dari mockup ini&lt;/h2&gt;</p>
+<p>&lt;ul&gt;</p>
+<p>&lt;li&gt;Accent dua room (biru vs violet) — setuju, atau mau satu warna brand aja?&lt;/li&gt;</p>
+<p>&lt;li&gt;Density Cuda Agent (padat, banyak info) vs Cuda AI (lega) — pas?&lt;/li&gt;</p>
+<p>&lt;li&gt;Istilah Indonesia (Misi / Langkah / Izin / Struk / Serahan) — pakai, atau campur Inggris?&lt;/li&gt;</p>
+<p>&lt;li&gt;Layout mobile Cuda Agent pakai tab bar — oke?&lt;/li&gt;</p>
+<p>&lt;/ul&gt;</p>
+<p>&lt;div class="note"&gt;&lt;b&gt;Catatan:&lt;/b&gt; mockup ini menjawab pertanyaan &lt;em&gt;"bentuknya udah bener belum"&lt;/em&gt;, bukan</p>
+<p>&lt;em&gt;"fungsinya jalan"&lt;/em&gt;. Interaksi nyata (streaming, pause, rollback) baru ada di build.&lt;/div&gt;</p>
+<footer>Cuda — plan v1.0 · dibuat 23 Sep 2026 · sumber riset: Firecrawl (lihat <a href="research.html">Riset &amp; Sumber</a>)</footer>
+</main></div></body></html>
