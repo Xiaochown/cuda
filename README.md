@@ -8,7 +8,7 @@ Baca berurutan:
 1. **`AGENT_BRIEF.md`** — brief utama (aturan keras, stack, cara kerja, definition of done)
 2. **`docs/DECISIONS.md`** — 262 keputusan produk yang sudah LOCKED (sumber kebenaran)
 3. **`PLAN.md`** — arsitektur, spec tiap room, event protocol, data model, rencana 14 hari
-4. **`TASKS.md`** — checklist 40 task yang harus dikerjakan (update checkbox-nya)
+4. **`TASKS.md`** — checklist 38 task yang harus dikerjakan (update checkbox-nya)
 5. **`docs/SETUP_LAPTOP.md`** — setup environment (WSL2 + Node 22 + gh)
 6. **`docs/RESEARCH.md`** — dasar riset desain
 
@@ -20,7 +20,7 @@ Prompt siap-paste: **`PROMPT.md`**
 |---|---|
 | `AGENT_BRIEF.md` | Brief eksekusi untuk AI agent (aturan keras, guardrail, DoD) |
 | `PROMPT.md` | Prompt siap-paste ke agent |
-| `TASKS.md` | 40 task (P0–P3) dengan acceptance criteria + checkbox |
+| `TASKS.md` | 38 task (P0–P3) dengan acceptance criteria + checkbox |
 | `PLAN.md` | Implementation Plan v2 (14 hari) |
 | `docs/DECISIONS.md` | Decision record: 5 pivot, 8 flag, capability map 16 grup, 5 terobosan |
 | `docs/RESEARCH.md` | Riset Firecrawl (15 query, ~40 halaman) + temuan lingkungan |
